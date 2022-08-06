@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class PhysicsRigidBody : IRigidBody
 {
-    const float epsilon = 0.01f;
-
     public ICollider Collider { get; }
 
     public Vector2 Position { get; set; }

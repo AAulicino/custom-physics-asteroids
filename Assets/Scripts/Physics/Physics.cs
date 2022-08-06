@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.Profiling;
 
 public class Physics : IDisposable
 {
@@ -50,13 +51,25 @@ public class Physics : IDisposable
 
     void HandlePhysicsStep (float step)
     {
+        Profiler.BeginSample("Physics.Step");
+
         foreach (IPhysicsEntity entity in entities)
             entity.OnStep(step);
 
-        var collisions = detector.DetectCollisions(entities.ToArray());
+        Profiler.BeginSample("Physics.Step.DetectCollisions");
 
-        foreach (var col in collisions)
+        ICollection<Collision> collisions = detector.DetectCollisions(entities.ToArray());
+
+        Profiler.EndSample();
+
+        Profiler.BeginSample("Physics.Step.ResolveCollisions");
+
+        foreach (Collision col in collisions)
             col.Self.OnCollision(col);
+
+        Profiler.EndSample();
+
+        Profiler.EndSample();
     }
 
     void HandlePostPhysicsStep ()

@@ -17,7 +17,7 @@ public class Entity : MonoBehaviour
         transform.rotation = Quaternion.Euler(0, 0, physicsEntity.RigidBody.Rotation);
     }
 
-    void OnDrawGizmos ()
+    void OnDrawGizmosSelected ()
     {
         DebugExtension.DrawRect(physicsEntity.Collider.Bounds, Color.red);
     }

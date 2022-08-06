@@ -8,5 +8,4 @@ public interface ICollider
 
     bool CollidesWith (ICollider other);
     void SetPosition (Vector2 position);
-    Vector2 ClosestPointOnBoundsToPoint (Vector2 point);
 }

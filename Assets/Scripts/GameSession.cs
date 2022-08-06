@@ -16,9 +16,12 @@ public class GameSession : IDisposable
     {
         physics.Initialize();
 
-        Entity entity = GameObject.Instantiate(Resources.Load<Entity>("Entity"));
-        entity.Initialize(physics.CreateEntity());
-        entity.physicsEntity.RigidBody.Velocity = Vector2.one;
+        for (int i = 0; i < 100; i++)
+        {
+            Entity entity = GameObject.Instantiate(Resources.Load<Entity>("Entity"));
+            entity.Initialize(physics.CreateEntity());
+            entity.physicsEntity.RigidBody.Velocity = new Vector2(UnityEngine.Random.value, UnityEngine.Random.value);
+        }
     }
 
     public void Dispose ()
