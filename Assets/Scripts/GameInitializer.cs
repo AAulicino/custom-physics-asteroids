@@ -17,13 +17,16 @@ public class GameInitializer : MonoBehaviour
             new ScreenCollider(Rect.MinMaxRect(max.x, min.y, max.x + 1, max.y)),
         };
 
+        ViewUpdater viewUpdater = new GameObject("ViewUpdater").AddComponent<ViewUpdater>();
+
         PhysicsUpdater updater = new PhysicsUpdater();
         gameSession = new GameSession(
             updater,
             new Physics(
                 updater,
                 new CollisionDetector(screenBounds)
-            )
+            ),
+            new EntitiesViewManager(viewUpdater)
         );
 
         DebugExtension.DebugRect(screenBounds[0].Bounds, Color.red, 100);

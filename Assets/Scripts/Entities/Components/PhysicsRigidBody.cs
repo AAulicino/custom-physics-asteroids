@@ -27,9 +27,6 @@ public class PhysicsRigidBody : IRigidBody
 
     public void ResolveCollision (Collision collision)
     {
-        if (Velocity.sqrMagnitude == 0)
-            return;
-
         Vector2 newVelocity = Velocity;
         Vector2 newPosition = Position;
 

@@ -1,17 +1,15 @@
 using UnityEngine;
 
-public class Entity : MonoBehaviour
+public class EntityView : MonoBehaviour
 {
-    public IPhysicsEntity physicsEntity;
+    protected IPhysicsEntity physicsEntity;
 
     public void Initialize (IPhysicsEntity physicsEntity)
     {
         this.physicsEntity = physicsEntity;
     }
 
-    void Update () => Sync();
-
-    public void Sync ()
+    public virtual void Sync ()
     {
         transform.position = physicsEntity.RigidBody.Position;
         transform.rotation = Quaternion.Euler(0, 0, physicsEntity.RigidBody.Rotation);
@@ -19,6 +17,7 @@ public class Entity : MonoBehaviour
 
     void OnDrawGizmosSelected ()
     {
-        DebugExtension.DrawRect(physicsEntity.Collider.Bounds, Color.red);
+        if (physicsEntity != null)
+            DebugExtension.DrawRect(physicsEntity.Collider.Bounds, Color.red);
     }
 }

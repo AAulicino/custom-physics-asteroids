@@ -5,9 +5,15 @@ public class GameSession : IDisposable
 {
     readonly IPhysicsUpdater updater;
     readonly Physics physics;
+    readonly IEntitiesViewManager entitiesViewManager;
 
-    public GameSession (IPhysicsUpdater updater, Physics physics)
+    public GameSession (
+        IPhysicsUpdater updater,
+        Physics physics,
+        IEntitiesViewManager entitiesViewManager
+    )
     {
+        this.entitiesViewManager = entitiesViewManager;
         this.updater = updater;
         this.physics = physics;
     }
@@ -15,13 +21,11 @@ public class GameSession : IDisposable
     public void Initialize ()
     {
         physics.Initialize();
+        entitiesViewManager.Initialize();
 
-        for (int i = 0; i < 100; i++)
-        {
-            Entity entity = GameObject.Instantiate(Resources.Load<Entity>("Entity"));
-            entity.Initialize(physics.CreateEntity());
-            entity.physicsEntity.RigidBody.Velocity = new Vector2(UnityEngine.Random.value, UnityEngine.Random.value);
-        }
+        PlayerView entity = GameObject.Instantiate(Resources.Load<PlayerView>("Player"));
+        entity.Initialize(physics.CreateEntity());
+        entitiesViewManager.AddEntity(entity);
     }
 
     public void Dispose ()
