@@ -98,3 +98,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bounds: {x: 1.11, y: 1.28}
+  collisionLayer: 1
+  movementSpeed: 5

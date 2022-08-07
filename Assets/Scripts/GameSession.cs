@@ -1,30 +1,27 @@
 using System;
 using UnityEngine;
 
-public class GameSession : IDisposable
+public class GameSessionModel : IDisposable
 {
     readonly IPhysicsUpdater physicsUpdater;
-    readonly IViewUpdater viewUpdater;
     readonly IEntitiesViewManager entitiesViewManager;
 
-    readonly IPhysicsEntityFactory physicsEntityFactory;
     readonly IStageBounds stageBounds;
+    readonly IEntityFactory entityFactory;
     readonly Physics physics;
 
-    public GameSession (
+    public GameSessionModel (
         IPhysicsUpdater updater,
-        IViewUpdater viewUpdater,
         Physics physics,
         IEntitiesViewManager entitiesViewManager,
-        IPhysicsEntityFactory physicsEntityFactory,
-        IStageBounds stageBounds
+        IStageBounds stageBounds,
+        IEntityFactory entityFactory
     )
     {
         this.entitiesViewManager = entitiesViewManager;
-        this.physicsEntityFactory = physicsEntityFactory;
         this.stageBounds = stageBounds;
+        this.entityFactory = entityFactory;
         this.physicsUpdater = updater;
-        this.viewUpdater = viewUpdater;
         this.physics = physics;
     }
 
@@ -33,29 +30,9 @@ public class GameSession : IDisposable
         physics.Initialize();
         entitiesViewManager.Initialize();
         stageBounds.Initialize();
-        CreatePlayer();
-        CreateAsteroids();
-    }
-
-    void CreatePlayer ()
-    {
-        PlayerView entity = GameObject.Instantiate(Resources.Load<PlayerView>("Player"));
-        IPhysicsEntity entity1 = physicsEntityFactory.Create();
-        physics.AddEntity(entity1);
-        entity.Initialize(entity1);
-        entitiesViewManager.AddEntity(entity);
-    }
-
-    void CreateAsteroids ()
-    {
+        entityFactory.CreatePlayer(Vector3.zero);
         for (int i = 0; i < 10; i++)
-        {
-            EntityView ett = GameObject.Instantiate(Resources.Load<EntityView>("Asteroid"));
-            IPhysicsEntity ett1 = physicsEntityFactory.Create();
-            physics.AddEntity(ett1);
-            ett.Initialize(ett1);
-            entitiesViewManager.AddEntity(ett);
-        }
+            entityFactory.CreateAsteroid(Vector3.zero);
     }
 
     public void Dispose ()

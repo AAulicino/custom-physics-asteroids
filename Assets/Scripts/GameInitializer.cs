@@ -2,26 +2,32 @@ using UnityEngine;
 
 public class GameInitializer : MonoBehaviour
 {
-    GameSession gameSession;
+    GameSessionModel gameSession;
 
     void Awake ()
     {
         ViewUpdater viewUpdater = new GameObject("ViewUpdater").AddComponent<ViewUpdater>();
-        PhysicsUpdater physicsUpdater = new PhysicsUpdater();
-
-        StageBounds stageBounds = new StageBounds(physicsUpdater, viewUpdater);
-        IPhysicsEntityFactory entityFactory = new PhysicsEntityFactory(stageBounds);
-
-        gameSession = new GameSession(
+        PhysicsUpdater physicsUpdater = new();
+        Physics physics = new(
             physicsUpdater,
-            viewUpdater,
-            new Physics(
-                physicsUpdater,
-                new CollisionDetector()
-            ),
-            new EntitiesViewManager(viewUpdater),
-            entityFactory,
-            stageBounds
+            new CollisionDetector()
+        );
+        StageBounds stageBounds = new(physicsUpdater, viewUpdater);
+        EntitiesViewManager entitiesViewManager = new(physicsUpdater, viewUpdater);
+
+        EntityFactory entityFactory = new EntityFactory(
+            new EntityModelFactory(stageBounds),
+            new EntityViewFactory(),
+            physics,
+            entitiesViewManager
+        );
+
+        gameSession = new GameSessionModel(
+            physicsUpdater,
+            physics,
+            entitiesViewManager,
+            stageBounds,
+            entityFactory
         );
 
         gameSession.Initialize();

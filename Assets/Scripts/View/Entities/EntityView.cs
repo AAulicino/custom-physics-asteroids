@@ -1,21 +1,45 @@
+using System;
 using UnityEngine;
 
 public abstract class EntityView : MonoBehaviour
 {
+    public event Action<EntityView> OnDestroy;
+
     [SerializeField] Vector2 bounds;
 
-    protected IPhysicsEntity physicsEntity;
+    protected IEntityModel model;
 
-    public virtual void Initialize (IPhysicsEntity physicsEntity)
+    bool modelDestroyed;
+
+    public virtual void Initialize (IEntityModel model)
     {
-        this.physicsEntity = physicsEntity;
-        physicsEntity.Collider.SetSize(bounds);
+        this.model = model;
+        model.OnReadyToReceiveInputs += OnPrePhysicsStep;
+        model.OnDestroy += HandleModelDestroyed;
+        model.Collider.SetSize(bounds);
     }
 
-    public virtual void Sync ()
+    public virtual void OnPrePhysicsStep ()
     {
-        transform.position = physicsEntity.RigidBody.Position;
-        transform.rotation = Quaternion.Euler(0, 0, physicsEntity.RigidBody.Rotation);
+    }
+
+    public virtual void OnViewUpdate ()
+    {
+        if (modelDestroyed)
+        {
+            OnDestroy?.Invoke(this);
+            Destroy(gameObject);
+            return;
+        }
+
+        transform.position = model.RigidBody.Position;
+        transform.rotation = Quaternion.Euler(0, 0, model.RigidBody.Rotation);
+    }
+
+    void HandleModelDestroyed (IEntityModel model)
+    {
+        model.OnDestroy -= HandleModelDestroyed;
+        modelDestroyed = true;
     }
 
     void OnDrawGizmosSelected ()
@@ -29,7 +53,7 @@ public abstract class EntityView : MonoBehaviour
             ),
             Color.red
         );
-        if (physicsEntity != null)
-            DebugExtension.DrawRect(physicsEntity.Collider.Bounds, Color.green);
+        if (model != null)
+            DebugExtension.DrawRect(model.Collider.Bounds, Color.green);
     }
 }
