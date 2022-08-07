@@ -8,14 +8,14 @@ public class CollisionDetector
 
         for (int i = 0; i < entities.Count; i++)
         {
-            ICollider collider = entities[i].Collider;
+            IColliderModel collider = entities[i].Collider;
 
             for (int j = 0; j < entities.Count; j++)
             {
                 if (i == j)
                     continue;
 
-                ICollider other = entities[j].Collider;
+                IColliderModel other = entities[j].Collider;
 
                 if (collider.CollidesWith(other))
                     collisions.Add(new Collision(entities[i], other));

@@ -6,4 +6,7 @@ public class AsteroidSettings : EntitySettings, IAsteroidSettings
 {
     [field: SerializeField]
     public int StartingSize { get; private set; }
+
+    [field: SerializeField]
+    public int StartingCount { get; private set; }
 }

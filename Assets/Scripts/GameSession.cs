@@ -35,10 +35,19 @@ public class GameSessionModel : IDisposable
         entitiesViewManager.Initialize();
         stageBounds.Initialize();
 
+        CreatePlayers();
+        CreateAsteroids();
+    }
+
+    void CreatePlayers ()
+    {
         entityFactory.CreatePlayer(1, Vector3.left);
         entityFactory.CreatePlayer(2, Vector3.right);
+    }
 
-        for (int i = 0; i < 10; i++)
+    void CreateAsteroids ()
+    {
+        for (int i = 0; i < gameSettings.AsteroidSettings.StartingCount; i++)
         {
             entityFactory.CreateAsteroid(
                 gameSettings.AsteroidSettings.StartingSize,

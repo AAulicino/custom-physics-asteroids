@@ -1,11 +1,11 @@
 using System;
 using UnityEngine;
 
-public class PhysicsRigidBody : IRigidBody
+public class RigidBodyModel : IRigidBodyModel
 {
     public event Action OnOutOfBounds;
 
-    public ICollider Collider { get; }
+    public IColliderModel Collider { get; }
 
     public Vector2 Position { get; set; }
     public Vector2 Velocity { get; set; }
@@ -21,10 +21,10 @@ public class PhysicsRigidBody : IRigidBody
     protected readonly IEntitySettings settings;
     protected readonly IStageBounds stageInfo;
 
-    public PhysicsRigidBody (
+    public RigidBodyModel (
         IEntitySettings settings,
         IStageBounds stageInfo,
-        ICollider collider
+        IColliderModel collider
     )
     {
         this.settings = settings;

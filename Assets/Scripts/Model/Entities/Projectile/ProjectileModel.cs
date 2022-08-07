@@ -3,8 +3,8 @@ using UnityEngine;
 public class ProjectileModel : EntityModel, IProjectileModel
 {
     public ProjectileModel (
-        IRigidBody rigidBody,
-        ICollider collider
+        IRigidBodyModel rigidBody,
+        IColliderModel collider
     ) : base(rigidBody, collider)
     {
         SetInitialSpeed();

@@ -10,8 +10,8 @@ public class AsteroidModel : EntityModel, IAsteroidModel
 
     public AsteroidModel (
         int size,
-        IRigidBody rigidBody,
-        ICollider collider,
+        IRigidBodyModel rigidBody,
+        IColliderModel collider,
         IEntityFactory entityFactory
     ) : base(rigidBody, collider)
     {
@@ -50,23 +50,12 @@ public class AsteroidModel : EntityModel, IAsteroidModel
             random.Range(-RigidBody.MaxSpeed, RigidBody.MaxSpeed)
         );
 
-        velocity = ClampMagnitude(velocity, 1, RigidBody.MaxSpeed);
+        velocity = velocity.ClampMagnitude(1, RigidBody.MaxSpeed);
 
         entityFactory.CreateAsteroid(
             size - 1,
             RigidBody.Position,
             velocity
         );
-    }
-
-    Vector3 ClampMagnitude (Vector3 v, float min, float max)
-    {
-        float sqrMagnitude = v.sqrMagnitude;
-
-        if (sqrMagnitude > max * max)
-            return v.normalized * max;
-        else if (sqrMagnitude < min * min)
-            return v.normalized * min;
-        return v;
     }
 }

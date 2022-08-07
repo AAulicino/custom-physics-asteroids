@@ -1,9 +1,9 @@
 public class Collision
 {
     public readonly IEntityModel Self;
-    public readonly ICollider Other;
+    public readonly IColliderModel Other;
 
-    public Collision (IEntityModel a, ICollider b)
+    public Collision (IEntityModel a, IColliderModel b)
     {
         Self = a;
         Other = b;

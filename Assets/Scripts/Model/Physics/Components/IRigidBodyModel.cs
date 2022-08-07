@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public interface IRigidBody
+public interface IRigidBodyModel
 {
     event Action OnOutOfBounds;
 

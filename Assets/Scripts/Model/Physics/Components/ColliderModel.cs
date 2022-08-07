@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PhysicsCollider : ICollider
+public class ColliderModel : IColliderModel
 {
     public Rect Bounds { get; private set; }
     public CollisionLayer Layer { get; set; }
@@ -18,7 +18,7 @@ public class PhysicsCollider : ICollider
     int scale = 1;
     Rect unscaledBounds;
 
-    public PhysicsCollider (CollisionLayer layer)
+    public ColliderModel (CollisionLayer layer)
     {
         Layer = layer;
     }
@@ -30,7 +30,7 @@ public class PhysicsCollider : ICollider
         Bounds = bounds;
     }
 
-    public bool CollidesWith (ICollider other)
+    public bool CollidesWith (IColliderModel other)
     {
         return LayerCollidesWith(other.Layer) && Bounds.Overlaps(other.Bounds);
     }

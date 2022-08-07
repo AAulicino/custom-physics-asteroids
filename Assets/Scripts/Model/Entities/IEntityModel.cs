@@ -5,8 +5,8 @@ public interface IEntityModel
     event Action<IEntityModel> OnDestroy;
     event Action OnReadyToReceiveInputs;
 
-    IRigidBody RigidBody { get; }
-    ICollider Collider { get; }
+    IRigidBodyModel RigidBody { get; }
+    IColliderModel Collider { get; }
 
     void OnPrePhysicsStep ();
     void OnPhysicsStep (float deltaTime);

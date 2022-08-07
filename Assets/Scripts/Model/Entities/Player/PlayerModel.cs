@@ -1,11 +1,8 @@
-using System;
 using System.Diagnostics;
 using UnityEngine;
 
 public class PlayerModel : EntityModel, IPlayerModel
 {
-    public event Action<IPlayerModel> OnProjectileFired;
-
     public int PlayerId { get; private set; }
 
     readonly IPlayerSettings playerSettings;
@@ -15,8 +12,8 @@ public class PlayerModel : EntityModel, IPlayerModel
     public PlayerModel (
         int playerId,
         IPlayerSettings playerSettings,
-        IRigidBody rigidBody,
-        ICollider collider,
+        IRigidBodyModel rigidBody,
+        IColliderModel collider,
         IEntityFactory entityFactory
     ) : base(rigidBody, collider)
     {

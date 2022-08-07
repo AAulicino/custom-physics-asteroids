@@ -5,14 +5,14 @@ public abstract class EntityModel : IEntityModel
     public event Action<IEntityModel> OnDestroy;
     public event Action OnReadyToReceiveInputs;
 
-    public IRigidBody RigidBody { get; }
-    public ICollider Collider { get; }
+    public IRigidBodyModel RigidBody { get; }
+    public IColliderModel Collider { get; }
 
     bool destroyed;
 
     public EntityModel (
-        IRigidBody rigidBody,
-        ICollider collider
+        IRigidBodyModel rigidBody,
+        IColliderModel collider
     )
     {
         RigidBody = rigidBody;

@@ -13,8 +13,8 @@ public class EntityModelFactory : IEntityModelFactory
 
     public IPlayerModel CreatePlayer (int playerId, Vector3 position, IEntityFactory entityFactory)
     {
-        PhysicsCollider collider = new(CollisionLayer.Player);
-        PhysicsRigidBody rigidBody = new(gameSettings.PlayerSettings, stageBounds, collider)
+        ColliderModel collider = new(CollisionLayer.Player);
+        RigidBodyModel rigidBody = new(gameSettings.PlayerSettings, stageBounds, collider)
         {
             Position = position
         };
@@ -36,8 +36,8 @@ public class EntityModelFactory : IEntityModelFactory
         IEntityFactory entityFactory
     )
     {
-        PhysicsCollider collider = new(CollisionLayer.Asteroid);
-        PhysicsRigidBody rigidBody = new(gameSettings.AsteroidSettings, stageBounds, collider)
+        ColliderModel collider = new(CollisionLayer.Asteroid);
+        RigidBodyModel rigidBody = new(gameSettings.AsteroidSettings, stageBounds, collider)
         {
             Position = Position,
             Velocity = velocity
@@ -49,9 +49,9 @@ public class EntityModelFactory : IEntityModelFactory
 
     public IProjectileModel CreateProjectile (Vector3 position, float rotation, Vector3 velocity)
     {
-        PhysicsCollider collider = new(CollisionLayer.Projectile);
+        ColliderModel collider = new(CollisionLayer.Projectile);
 
-        PhysicsRigidBody rigidBody = new(gameSettings.ProjectileSettings, stageBounds, collider)
+        RigidBodyModel rigidBody = new(gameSettings.ProjectileSettings, stageBounds, collider)
         {
             Position = position,
             Rotation = rotation,
