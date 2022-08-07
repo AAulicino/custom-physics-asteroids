@@ -2,10 +2,10 @@ using UnityEngine;
 
 public interface ICollider
 {
-    int Id { get; }
     Rect Bounds { get; }
-    int Layer { get; }
+    int Layer { get; set; }
 
     bool CollidesWith (ICollider other);
     void SetPosition (Vector2 position);
+    void SetSize (Vector2 size);
 }

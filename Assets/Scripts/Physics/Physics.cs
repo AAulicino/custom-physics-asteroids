@@ -6,7 +6,8 @@ using UnityEngine.Profiling;
 public class Physics : IDisposable
 {
     readonly IPhysicsUpdater updater;
-    private readonly CollisionDetector detector;
+    readonly CollisionDetector collisionDetector;
+
     Queue<PhysicsOperation> operationQueue = new Queue<PhysicsOperation>();
 
     HashSet<IPhysicsEntity> entities = new();
@@ -14,7 +15,7 @@ public class Physics : IDisposable
     public Physics (IPhysicsUpdater updater, CollisionDetector detector)
     {
         this.updater = updater;
-        this.detector = detector;
+        this.collisionDetector = detector;
     }
 
     public void Initialize ()
@@ -24,16 +25,15 @@ public class Physics : IDisposable
         updater.OnStep += HandlePhysicsStep;
         updater.OnPostStep += HandlePostPhysicsStep;
     }
-    static int id;
 
-    public IPhysicsEntity CreateEntity ()
+    public void AddEntity (IPhysicsEntity entity)
     {
-        PhysicsCollider collider = new PhysicsCollider(id++, new UnityEngine.Rect(0, 0, .1f, .1f), -1);
-        PhysicsRigidBody rigidBody = new PhysicsRigidBody(collider);
-
-        var entity = new PhysicsEntity(id, rigidBody, collider);
         entities.Add(entity);
-        return entity;
+    }
+
+    public void RemoveEntity (IPhysicsEntity entity)
+    {
+        entities.Remove(entity);
     }
 
     void HandleOperationQueue ()
@@ -54,18 +54,18 @@ public class Physics : IDisposable
         Profiler.BeginSample("Physics.Step");
 
         foreach (IPhysicsEntity entity in entities)
-            entity.OnStep(step);
+            entity.OnPhysicsStep(step);
 
         Profiler.BeginSample("Physics.Step.DetectCollisions");
 
-        ICollection<Collision> collisions = detector.DetectCollisions(entities.ToArray());
+        ICollection<Collision> collisions = collisionDetector.DetectCollisions(entities.ToArray());
 
         Profiler.EndSample();
 
         Profiler.BeginSample("Physics.Step.ResolveCollisions");
 
         foreach (Collision col in collisions)
-            col.Self.OnCollision(col);
+            col.Self.OnCollide(col);
 
         Profiler.EndSample();
 
@@ -75,7 +75,7 @@ public class Physics : IDisposable
     void HandlePostPhysicsStep ()
     {
         foreach (IPhysicsEntity entity in entities)
-            entity.OnPostStep();
+            entity.OnPostPhysicsStep();
     }
 
     public void Dispose ()

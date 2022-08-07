@@ -8,6 +8,5 @@ public interface IRigidBody
     float Rotation { get; set; }
 
     void Step (float deltaTime);
-    void ResolveCollision (Collision collision);
     void SyncComponents ();
 }

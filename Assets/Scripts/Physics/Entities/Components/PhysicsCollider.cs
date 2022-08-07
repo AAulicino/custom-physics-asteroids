@@ -2,15 +2,13 @@ using UnityEngine;
 
 public class PhysicsCollider : ICollider
 {
-    public int Id { get; }
     public Rect Bounds { get; private set; }
-    public int Layer { get; }
+    public int Layer { get; set; }
 
     Rect originalBounds;
 
-    public PhysicsCollider (int id, Rect bounds, int layer)
+    public PhysicsCollider (Rect bounds, int layer)
     {
-        Id = id;
         Layer = layer;
         originalBounds = bounds;
     }
@@ -26,5 +24,11 @@ public class PhysicsCollider : ICollider
     public bool CollidesWith (ICollider other)
     {
         return (other.Layer & Layer) != 0 && Bounds.Overlaps(other.Bounds);
+    }
+
+    public void SetSize (Vector2 size)
+    {
+        originalBounds.size = size;
+        SetPosition(Bounds.center);
     }
 }

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1825067847613210128}
   - component: {fileID: -5293417942577397672}
   m_Layer: 0
-  m_Name: Entity
+  m_Name: Asteroid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -74,7 +74,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: 31c73526797b94421ab20201438ca3af, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -94,6 +94,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6877469228160845190}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c611efff4bda14e8bbb2dcdb917253a5, type: 3}
+  m_Script: {fileID: 11500000, guid: 4325ec3c6c6b7479eb016ec0c9f02d79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bounds: {x: 1.28, y: 1.28}
