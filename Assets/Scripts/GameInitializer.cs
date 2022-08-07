@@ -10,7 +10,7 @@ public class GameInitializer : MonoBehaviour
         GameSettings gameSettings = Resources.Load<GameSettings>("Settings/GameSettings");
         PhysicsUpdater physicsUpdater = new();
 
-        Physics physics = new(
+        IPhysicsEntityManager physics = new PhysicsEntityManager(
             physicsUpdater,
             new CollisionDetector(
                 new QuadTree<IEntityModel>(
@@ -45,10 +45,33 @@ public class GameInitializer : MonoBehaviour
         );
 
         gameSession.Initialize();
+
+        ListenToEditorPause();
+    }
+
+    void OnApplicationPause (bool pauseStatus)
+    {
+        gameSession.Pause(pauseStatus || UnityEditor.EditorApplication.isPaused);
     }
 
     void OnDestroy ()
     {
         gameSession.Dispose();
+
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.pauseStateChanged -= HandlePauseStateChanged;
+#endif
+    }
+
+    void ListenToEditorPause ()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.pauseStateChanged += HandlePauseStateChanged;
+    }
+
+    void HandlePauseStateChanged (UnityEditor.PauseState state)
+    {
+        OnApplicationPause(state == UnityEditor.PauseState.Paused);
+#endif
     }
 }

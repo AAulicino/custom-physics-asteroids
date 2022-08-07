@@ -7,4 +7,5 @@ public interface IPhysicsUpdater : IDisposable
     event Action OnPostStep;
 
     void Initialize ();
+    void Pause (bool pause);
 }

@@ -13,6 +13,7 @@ public class PhysicsUpdater : IDisposable, IPhysicsUpdater
     public event Action OnPostStep;
 
     readonly Stopwatch time = Stopwatch.StartNew();
+    readonly ManualResetEvent pauseHandler = new(true);
 
     Thread physicsThread;
     bool keepRunning;
@@ -20,7 +21,7 @@ public class PhysicsUpdater : IDisposable, IPhysicsUpdater
     double currentTime;
     double accumulator;
 
-    public void Initialize()
+    public void Initialize ()
     {
         keepRunning = true;
         physicsThread = new Thread(PhysicsLoop)
@@ -30,10 +31,26 @@ public class PhysicsUpdater : IDisposable, IPhysicsUpdater
         physicsThread.Start();
     }
 
-    void PhysicsLoop()
+    public void Pause (bool pause)
+    {
+        Debug.Log("Pause");
+        if (pause)
+        {
+            pauseHandler.Reset();
+            time.Stop();
+        }
+        else
+        {
+            time.Start();
+            pauseHandler.Set();
+        }
+    }
+
+    void PhysicsLoop ()
     {
         while (keepRunning)
         {
+            pauseHandler.WaitOne();
             try
             {
                 double newTime = time.Elapsed.TotalSeconds;
@@ -56,13 +73,6 @@ public class PhysicsUpdater : IDisposable, IPhysicsUpdater
 
                     accumulator -= deltaTime;
                 }
-
-                // float alpha = accumulator / (FIXED_TIME_STEP );
-
-                // foreach (var body in bodies)
-                // {
-                //     body.Interpolate(ref alpha);
-                // }
             }
             catch (Exception ex)
             {
@@ -71,7 +81,7 @@ public class PhysicsUpdater : IDisposable, IPhysicsUpdater
         }
     }
 
-    public void Dispose()
+    public void Dispose ()
     {
         keepRunning = false;
     }

@@ -10,11 +10,11 @@ public class GameSessionModel : IDisposable
     readonly IStageBounds stageBounds;
     readonly IEntityFactory entityFactory;
     readonly IGameSettings gameSettings;
-    readonly Physics physics;
+    readonly IPhysicsEntityManager physics;
 
     public GameSessionModel (
         IPhysicsUpdater updater,
-        Physics physics,
+        IPhysicsEntityManager physics,
         IEntitiesViewManager entitiesViewManager,
         IStageBounds stageBounds,
         IEntityFactory entityFactory,
@@ -37,6 +37,11 @@ public class GameSessionModel : IDisposable
 
         CreatePlayers();
         CreateAsteroids();
+    }
+
+    public void Pause (bool pause)
+    {
+        physicsUpdater.Pause(pause);
     }
 
     void CreatePlayers ()

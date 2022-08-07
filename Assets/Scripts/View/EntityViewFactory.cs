@@ -15,9 +15,7 @@ public class EntityViewFactory : IEntityViewFactory, IDisposable
     }
 
     public PlayerView CreatePlayer (int playerId)
-    {
-        return Object.Instantiate(Resources.Load<PlayerView>("Entities/Player" + playerId));
-    }
+        => Object.Instantiate(Resources.Load<PlayerView>("Entities/Player" + playerId));
 
     public AsteroidView CreateAsteroid () => asteroidPool.Get();
 

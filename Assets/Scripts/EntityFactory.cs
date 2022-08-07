@@ -6,7 +6,7 @@ public class EntityFactory : IEntityFactory
 {
     readonly IEntityModelFactory modelFactory;
     readonly IEntityViewFactory viewFactory;
-    readonly Physics physics;
+    readonly IPhysicsEntityManager physics;
     readonly IEntitiesViewManager viewManager;
     readonly ViewUpdater viewUpdater;
 
@@ -15,7 +15,7 @@ public class EntityFactory : IEntityFactory
     public EntityFactory (
         IEntityModelFactory modelFactory,
         IEntityViewFactory viewFactory,
-        Physics physics,
+        IPhysicsEntityManager physics,
         IEntitiesViewManager viewManager,
         ViewUpdater viewUpdater
     )

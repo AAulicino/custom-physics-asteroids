@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public class Physics : IDisposable
+public class PhysicsEntityManager : IDisposable, IPhysicsEntityManager
 {
     readonly IPhysicsUpdater updater;
     readonly CollisionDetector collisionDetector;
@@ -11,7 +11,7 @@ public class Physics : IDisposable
     readonly Queue<AddOrRemoveOperation<IEntityModel>> operationQueue = new();
     readonly List<Collision> collisionsBuffer = new();
 
-    public Physics (IPhysicsUpdater updater, CollisionDetector detector)
+    public PhysicsEntityManager (IPhysicsUpdater updater, CollisionDetector detector)
     {
         this.updater = updater;
         this.collisionDetector = detector;

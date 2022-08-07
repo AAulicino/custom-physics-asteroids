@@ -1,4 +1,4 @@
-public interface IQuadTreeObjectBounds<in T>
+public interface IQuadTreeObjectBounds<T>
 {
     float GetLeft (T obj);
     float GetRight (T obj);
