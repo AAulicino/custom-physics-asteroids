@@ -36,7 +36,7 @@ public class AsteroidModel : EntityModel, IAsteroidModel
     {
         Destroy();
 
-        if (size == 0)
+        if (size == 1)
             return;
 
         CreateAsteroid();

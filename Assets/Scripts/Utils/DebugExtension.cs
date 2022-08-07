@@ -34,4 +34,18 @@ public static class DebugExtension
         Debug.DrawLine(lu, ld, color, duration, depthTest);
         Debug.DrawLine(rd, ld, color, duration, depthTest);
     }
+
+    public static void DebugQuadTreeRect (QuadTreeRect rect, Color color, float duration = 0, bool depthTest = true)
+    {
+        Vector2 ru = new Vector2(rect.Right, rect.Top);
+        Vector2 lu = new Vector2(rect.Left, rect.Top);
+
+        Vector2 rd = new Vector2(rect.Right, rect.Bottom);
+        Vector2 ld = new Vector2(rect.Left, rect.Bottom);
+
+        Debug.DrawLine(ru, lu, color, duration, depthTest);
+        Debug.DrawLine(ru, rd, color, duration, depthTest);
+        Debug.DrawLine(lu, ld, color, duration, depthTest);
+        Debug.DrawLine(rd, ld, color, duration, depthTest);
+    }
 }

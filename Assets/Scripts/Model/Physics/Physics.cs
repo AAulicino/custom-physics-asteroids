@@ -9,6 +9,7 @@ public class Physics : IDisposable
     readonly HashSet<IEntityModel> entities = new();
 
     readonly Queue<AddOrRemoveOperation<IEntityModel>> operationQueue = new();
+    readonly List<Collision> collisionsBuffer = new();
 
     public Physics (IPhysicsUpdater updater, CollisionDetector detector)
     {
@@ -47,9 +48,9 @@ public class Physics : IDisposable
         foreach (IEntityModel entity in entities)
             entity.OnPhysicsStep(step);
 
-        ICollection<Collision> collisions = collisionDetector.DetectCollisions(entities.ToArray());
+        collisionDetector.DetectCollisions(entities.ToArray(), collisionsBuffer);
 
-        foreach (Collision col in collisions)
+        foreach (Collision col in collisionsBuffer)
             col.Self.OnCollide(col);
     }
 

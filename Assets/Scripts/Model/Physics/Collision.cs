@@ -1,11 +1,11 @@
-public class Collision
+public readonly struct Collision
 {
     public readonly IEntityModel Self;
     public readonly IColliderModel Other;
 
-    public Collision (IEntityModel a, IColliderModel b)
+    public Collision (IEntityModel self, IColliderModel other)
     {
-        Self = a;
-        Other = b;
+        Self = self;
+        Other = other;
     }
 }

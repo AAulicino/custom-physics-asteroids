@@ -7,15 +7,22 @@ public class GameInitializer : MonoBehaviour
     void Awake ()
     {
         ViewUpdater viewUpdater = new GameObject("ViewUpdater").AddComponent<ViewUpdater>();
+        GameSettings gameSettings = Resources.Load<GameSettings>("Settings/GameSettings");
         PhysicsUpdater physicsUpdater = new();
+
         Physics physics = new(
             physicsUpdater,
-            new CollisionDetector()
+            new CollisionDetector(
+                new QuadTree<IEntityModel>(
+                    Camera.main.ViewportToWorldPoint(Vector2.zero),
+                    Camera.main.ViewportToWorldPoint(Vector2.one),
+                    new EntityBounds()
+                ),
+                gameSettings
+            )
         );
         StageBounds stageBounds = new(physicsUpdater, viewUpdater);
         EntitiesViewManager entitiesViewManager = new(physicsUpdater, viewUpdater);
-
-        GameSettings gameSettings = Resources.Load<GameSettings>("Settings/GameSettings");
 
         EntityFactory entityFactory = new EntityFactory(
             new EntityModelFactory(

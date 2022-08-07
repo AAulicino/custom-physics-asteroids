@@ -1,27 +1,48 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 public class CollisionDetector
 {
-    public ICollection<Collision> DetectCollisions (IReadOnlyList<IEntityModel> entities)
+    readonly IQuadTree<IEntityModel> quadTree;
+    readonly IGameSettings gameSettings;
+
+    public CollisionDetector (IQuadTree<IEntityModel> quadTree, IGameSettings gameSettings)
     {
-        List<Collision> collisions = new List<Collision>();
+        this.gameSettings = gameSettings;
+        this.quadTree = quadTree;
+    }
+
+    public void DetectCollisions (
+        IReadOnlyList<IEntityModel> entities,
+        List<Collision> collisionsBuffer
+    )
+    {
+        quadTree.Clear();
+        quadTree.InsertRange(entities);
+
+        if (gameSettings.RenderCollisionQuadTree)
+            RenderQuadTree();
+
+        collisionsBuffer.Clear();
 
         for (int i = 0; i < entities.Count; i++)
         {
             IColliderModel collider = entities[i].Collider;
 
-            for (int j = 0; j < entities.Count; j++)
+            foreach (IEntityModel other in quadTree.GetNearestObjects(entities[i]))
             {
-                if (i == j)
+                if (other == entities[i])
                     continue;
 
-                IColliderModel other = entities[j].Collider;
-
-                if (collider.CollidesWith(other))
-                    collisions.Add(new Collision(entities[i], other));
+                if (collider.CollidesWith(other.Collider))
+                    collisionsBuffer.Add(new Collision(entities[i], other.Collider));
             }
         }
+    }
 
-        return collisions;
+    void RenderQuadTree ()
+    {
+        foreach (QuadTreeRect quad in quadTree.GetGrid())
+            DebugExtension.DebugQuadTreeRect(quad, Color.red, gameSettings.TimeStep);
     }
 }
