@@ -1,7 +1,10 @@
+using System;
 using UnityEngine;
 
 public class PhysicsRigidBody : IRigidBody
 {
+    public event Action OnOutOfBounds;
+
     public ICollider Collider { get; }
 
     public Vector2 Position { get; set; }
@@ -10,11 +13,13 @@ public class PhysicsRigidBody : IRigidBody
     public float Rotation { get; set; }
 
     readonly IStageBounds stageInfo;
+    readonly bool wrapOnScreenEdge;
 
-    public PhysicsRigidBody (IStageBounds stageInfo, ICollider collider)
+    public PhysicsRigidBody (IStageBounds stageInfo, ICollider collider, bool wrapOnScreenEdge)
     {
         this.stageInfo = stageInfo;
         Collider = collider;
+        this.wrapOnScreenEdge = wrapOnScreenEdge;
     }
 
     public void Step (float deltaTime)
@@ -22,14 +27,21 @@ public class PhysicsRigidBody : IRigidBody
         Position += Velocity * deltaTime;
         Rotation += AngularVelocity * deltaTime;
 
-        if (stageInfo.Rect.xMax < Position.x)
-            Position = new Vector2(stageInfo.Rect.xMin, Position.y);
-        else if (stageInfo.Rect.xMin > Position.x)
-            Position = new Vector2(stageInfo.Rect.xMax, Position.y);
-        else if (stageInfo.Rect.yMax < Position.y)
-            Position = new Vector2(Position.x, stageInfo.Rect.yMin);
-        else if (stageInfo.Rect.yMin > Position.y)
-            Position = new Vector2(Position.x, stageInfo.Rect.yMax);
+        if (wrapOnScreenEdge)
+        {
+            if (stageInfo.Rect.xMax < Position.x)
+                Position = new Vector2(stageInfo.Rect.xMin, Position.y);
+            else if (stageInfo.Rect.xMin > Position.x)
+                Position = new Vector2(stageInfo.Rect.xMax, Position.y);
+            else if (stageInfo.Rect.yMax < Position.y)
+                Position = new Vector2(Position.x, stageInfo.Rect.yMin);
+            else if (stageInfo.Rect.yMin > Position.y)
+                Position = new Vector2(Position.x, stageInfo.Rect.yMax);
+        }
+        else if (!stageInfo.Rect.Contains(Position))
+        {
+            OnOutOfBounds?.Invoke();
+        }
     }
 
     public void SyncComponents ()

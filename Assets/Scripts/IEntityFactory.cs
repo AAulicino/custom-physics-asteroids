@@ -1,6 +1,7 @@
+using System;
 using UnityEngine;
 
-public interface IEntityFactory
+public interface IEntityFactory : IDisposable
 {
     void CreateAsteroid (Vector3 position);
     void CreatePlayer (Vector3 position);

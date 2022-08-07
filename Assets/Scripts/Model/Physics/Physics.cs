@@ -26,12 +26,12 @@ public class Physics : IDisposable
 
     public void AddEntity (IEntityModel entity)
     {
-        entities.Add(entity);
+        operationQueue.Enqueue(new AddOrRemoveOperation<IEntityModel>(true, entity));
     }
 
     public void RemoveEntity (IEntityModel entity)
     {
-        entities.Remove(entity);
+        operationQueue.Enqueue(new AddOrRemoveOperation<IEntityModel>(false, entity));
     }
 
     void HandlePrePhysicsStep ()

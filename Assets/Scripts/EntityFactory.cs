@@ -1,3 +1,6 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EntityFactory : IEntityFactory
@@ -6,39 +9,61 @@ public class EntityFactory : IEntityFactory
     readonly IEntityViewFactory viewFactory;
     readonly Physics physics;
     readonly IEntitiesViewManager viewManager;
+    readonly ViewUpdater viewUpdater;
+
+    readonly Queue<Action> factoryQueue = new();
 
     public EntityFactory (
         IEntityModelFactory modelFactory,
         IEntityViewFactory viewFactory,
         Physics physics,
-        IEntitiesViewManager viewManager
+        IEntitiesViewManager viewManager,
+        ViewUpdater viewUpdater
     )
     {
         this.modelFactory = modelFactory;
         this.viewFactory = viewFactory;
         this.physics = physics;
         this.viewManager = viewManager;
+        this.viewUpdater = viewUpdater;
+
+        viewUpdater.OnUpdate += ProcessQueue;
     }
 
     public void CreatePlayer (Vector3 position)
     {
-        IPlayerModel model = modelFactory.CreatePlayer(position, this);
-        PlayerView view = viewFactory.CreatePlayer();
-        CreateEntity(model, view);
+        factoryQueue.Enqueue(() =>
+        {
+            IPlayerModel model = modelFactory.CreatePlayer(position, this);
+            PlayerView view = viewFactory.CreatePlayer();
+            CreateEntity(model, view);
+        });
     }
 
     public void CreateAsteroid (Vector3 position)
     {
-        IAsteroidModel model = modelFactory.CreateAsteroid();
-        AsteroidView view = viewFactory.CreateAsteroid();
-        CreateEntity(model, view);
+        factoryQueue.Enqueue(() =>
+        {
+            IAsteroidModel model = modelFactory.CreateAsteroid();
+            AsteroidView view = viewFactory.CreateAsteroid();
+            CreateEntity(model, view);
+        });
     }
 
     public void CreateProjectile (Vector3 position, float rotation, Vector3 velocity)
     {
-        IProjectileModel model = modelFactory.CreateProjectile(position, rotation, velocity);
-        ProjectileView view = viewFactory.CreateProjectile();
-        CreateEntity(model, view);
+        factoryQueue.Enqueue(() =>
+        {
+            IProjectileModel model = modelFactory.CreateProjectile(position, rotation, velocity);
+            ProjectileView view = viewFactory.CreateProjectile();
+            CreateEntity(model, view);
+        });
+    }
+
+    void ProcessQueue ()
+    {
+        while (factoryQueue.Count > 0)
+            factoryQueue.Dequeue()();
     }
 
     void CreateEntity (IEntityModel model, EntityView view)
@@ -46,5 +71,17 @@ public class EntityFactory : IEntityFactory
         physics.AddEntity(model);
         view.Initialize(model);
         viewManager.AddEntity(view);
+        model.OnDestroy += HandleEntityDestroyed;
+    }
+
+    void HandleEntityDestroyed (IEntityModel model)
+    {
+        model.OnDestroy -= HandleEntityDestroyed;
+        physics.RemoveEntity(model);
+    }
+
+    public void Dispose ()
+    {
+        viewUpdater.OnUpdate -= ProcessQueue;
     }
 }

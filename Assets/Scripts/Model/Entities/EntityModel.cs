@@ -18,6 +18,8 @@ public abstract class EntityModel : IEntityModel
     {
         RigidBody = rigidBody;
         Collider = collider;
+
+        RigidBody.OnOutOfBounds += Destroy;
     }
 
     public void OnPrePhysicsStep ()

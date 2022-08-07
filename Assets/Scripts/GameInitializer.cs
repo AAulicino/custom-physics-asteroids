@@ -19,7 +19,8 @@ public class GameInitializer : MonoBehaviour
             new EntityModelFactory(stageBounds),
             new EntityViewFactory(),
             physics,
-            entitiesViewManager
+            entitiesViewManager,
+            viewUpdater
         );
 
         gameSession = new GameSessionModel(

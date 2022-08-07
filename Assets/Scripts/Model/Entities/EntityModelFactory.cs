@@ -12,7 +12,7 @@ public class EntityModelFactory : IEntityModelFactory
     public IPlayerModel CreatePlayer (Vector3 position, IEntityFactory entityFactory)
     {
         PhysicsCollider collider = new(CollisionLayer.Player);
-        PhysicsRigidBody rigidBody = new(stageBounds, collider) { Position = position };
+        PhysicsRigidBody rigidBody = new(stageBounds, collider, true) { Position = position };
         rigidBody.SyncComponents();
 
         return new PlayerModel(rigidBody, collider, entityFactory);
@@ -21,9 +21,10 @@ public class EntityModelFactory : IEntityModelFactory
     public IAsteroidModel CreateAsteroid ()
     {
         PhysicsCollider collider = new(CollisionLayer.Asteroid);
-        PhysicsRigidBody rigidBody = new(stageBounds, collider)
+        PhysicsRigidBody rigidBody = new(stageBounds, collider, true)
         {
-            Position = stageBounds.RandomPointNearEdge()
+            Position = stageBounds.RandomPointNearEdge(),
+
         };
         rigidBody.SyncComponents();
 
@@ -34,11 +35,11 @@ public class EntityModelFactory : IEntityModelFactory
     {
         PhysicsCollider collider = new(CollisionLayer.Projectile);
 
-        PhysicsRigidBody rigidBody = new(stageBounds, collider)
+        PhysicsRigidBody rigidBody = new(stageBounds, collider, false)
         {
             Position = position,
             Rotation = rotation,
-            Velocity = velocity
+            Velocity = new Vector3(0, 0, rotation)
         };
         rigidBody.SyncComponents();
 

@@ -52,9 +52,10 @@ public class PhysicsCollider : ICollider
                 switch (other)
                 {
                     case CollisionLayer.Player:
-                        return true;
                     case CollisionLayer.Projectile:
                         return false;
+                    case CollisionLayer.Asteroid:
+                        return true;
                 }
                 break;
         }
