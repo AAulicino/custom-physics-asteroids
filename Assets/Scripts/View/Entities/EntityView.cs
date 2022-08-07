@@ -14,9 +14,12 @@ public abstract class EntityView : MonoBehaviour
     public virtual void Initialize (IEntityModel model)
     {
         this.model = model;
+
+        model.Collider.SetSize(bounds);
+        transform.localScale = Vector3.one * model.Collider.Scale;
+
         model.OnReadyToReceiveInputs += OnPrePhysicsStep;
         model.OnDestroy += HandleModelDestroyed;
-        model.Collider.SetSize(bounds);
     }
 
     public virtual void OnPrePhysicsStep ()

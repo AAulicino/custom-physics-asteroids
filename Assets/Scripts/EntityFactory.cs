@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -30,21 +29,21 @@ public class EntityFactory : IEntityFactory
         viewUpdater.OnUpdate += ProcessQueue;
     }
 
-    public void CreatePlayer (Vector3 position)
+    public void CreatePlayer (int playerId, Vector3 position)
     {
         factoryQueue.Enqueue(() =>
         {
-            IPlayerModel model = modelFactory.CreatePlayer(position, this);
-            PlayerView view = viewFactory.CreatePlayer();
+            IPlayerModel model = modelFactory.CreatePlayer(playerId, position, this);
+            PlayerView view = viewFactory.CreatePlayer(playerId);
             CreateEntity(model, view);
         });
     }
 
-    public void CreateAsteroid (Vector3 position)
+    public void CreateAsteroid (int size, Vector3 position, Vector3 velocity)
     {
         factoryQueue.Enqueue(() =>
         {
-            IAsteroidModel model = modelFactory.CreateAsteroid();
+            IAsteroidModel model = modelFactory.CreateAsteroid(size, position, velocity, this);
             AsteroidView view = viewFactory.CreateAsteroid();
             CreateEntity(model, view);
         });

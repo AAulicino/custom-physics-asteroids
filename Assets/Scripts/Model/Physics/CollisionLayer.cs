@@ -1,5 +1,3 @@
-using System;
-
 public enum CollisionLayer
 {
     None = 0,

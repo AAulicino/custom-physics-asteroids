@@ -5,6 +5,19 @@ public class PhysicsCollider : ICollider
     public Rect Bounds { get; private set; }
     public CollisionLayer Layer { get; set; }
 
+    public int Scale
+    {
+        get => scale;
+        set
+        {
+            scale = value;
+            ApplyBoundsScale();
+        }
+    }
+
+    int scale = 1;
+    Rect unscaledBounds;
+
     public PhysicsCollider (CollisionLayer layer)
     {
         Layer = layer;
@@ -65,9 +78,17 @@ public class PhysicsCollider : ICollider
 
     public void SetSize (Vector2 size)
     {
-        Rect bounds = Bounds;
-        bounds.size = size;
-        Bounds = bounds;
+        unscaledBounds = Bounds;
+        unscaledBounds.size = size;
+
+        ApplyBoundsScale();
         SetPosition(Bounds.center);
+    }
+
+    void ApplyBoundsScale ()
+    {
+        Rect bounds = Bounds;
+        bounds.size = unscaledBounds.size * scale;
+        Bounds = bounds;
     }
 }

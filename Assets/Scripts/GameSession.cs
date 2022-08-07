@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class GameSessionModel : IDisposable
 {
@@ -8,6 +9,7 @@ public class GameSessionModel : IDisposable
 
     readonly IStageBounds stageBounds;
     readonly IEntityFactory entityFactory;
+    readonly IGameSettings gameSettings;
     readonly Physics physics;
 
     public GameSessionModel (
@@ -15,12 +17,14 @@ public class GameSessionModel : IDisposable
         Physics physics,
         IEntitiesViewManager entitiesViewManager,
         IStageBounds stageBounds,
-        IEntityFactory entityFactory
+        IEntityFactory entityFactory,
+        IGameSettings gameSettings
     )
     {
         this.entitiesViewManager = entitiesViewManager;
         this.stageBounds = stageBounds;
         this.entityFactory = entityFactory;
+        this.gameSettings = gameSettings;
         this.physicsUpdater = updater;
         this.physics = physics;
     }
@@ -30,9 +34,18 @@ public class GameSessionModel : IDisposable
         physics.Initialize();
         entitiesViewManager.Initialize();
         stageBounds.Initialize();
-        entityFactory.CreatePlayer(Vector3.zero);
+
+        entityFactory.CreatePlayer(1, Vector3.left);
+        entityFactory.CreatePlayer(2, Vector3.right);
+
         for (int i = 0; i < 10; i++)
-            entityFactory.CreateAsteroid(Vector3.zero);
+        {
+            entityFactory.CreateAsteroid(
+                gameSettings.AsteroidSettings.StartingSize,
+                stageBounds.RandomPointNearEdge(),
+                new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f))
+            );
+        }
     }
 
     public void Dispose ()

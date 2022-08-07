@@ -3,39 +3,55 @@ using UnityEngine;
 public class EntityModelFactory : IEntityModelFactory
 {
     readonly IStageBounds stageBounds;
+    readonly IGameSettings gameSettings;
 
-    public EntityModelFactory (IStageBounds stageInfo)
+    public EntityModelFactory (IStageBounds stageInfo, IGameSettings gameSettings)
     {
+        this.gameSettings = gameSettings;
         this.stageBounds = stageInfo;
     }
 
-    public IPlayerModel CreatePlayer (Vector3 position, IEntityFactory entityFactory)
+    public IPlayerModel CreatePlayer (int playerId, Vector3 position, IEntityFactory entityFactory)
     {
         PhysicsCollider collider = new(CollisionLayer.Player);
-        PhysicsRigidBody rigidBody = new(stageBounds, collider, true) { Position = position };
-        rigidBody.SyncComponents();
-
-        return new PlayerModel(rigidBody, collider, entityFactory);
-    }
-
-    public IAsteroidModel CreateAsteroid ()
-    {
-        PhysicsCollider collider = new(CollisionLayer.Asteroid);
-        PhysicsRigidBody rigidBody = new(stageBounds, collider, true)
+        PhysicsRigidBody rigidBody = new(gameSettings.PlayerSettings, stageBounds, collider)
         {
-            Position = stageBounds.RandomPointNearEdge(),
-
+            Position = position
         };
         rigidBody.SyncComponents();
 
-        return new AsteroidModel(rigidBody, collider);
+        return new PlayerModel(
+            playerId,
+            gameSettings.PlayerSettings,
+            rigidBody,
+            collider,
+            entityFactory
+        );
+    }
+
+    public IAsteroidModel CreateAsteroid (
+        int size,
+        Vector3 Position,
+        Vector3 velocity,
+        IEntityFactory entityFactory
+    )
+    {
+        PhysicsCollider collider = new(CollisionLayer.Asteroid);
+        PhysicsRigidBody rigidBody = new(gameSettings.AsteroidSettings, stageBounds, collider)
+        {
+            Position = Position,
+            Velocity = velocity
+        };
+        rigidBody.SyncComponents();
+
+        return new AsteroidModel(size, rigidBody, collider, entityFactory);
     }
 
     public IProjectileModel CreateProjectile (Vector3 position, float rotation, Vector3 velocity)
     {
         PhysicsCollider collider = new(CollisionLayer.Projectile);
 
-        PhysicsRigidBody rigidBody = new(stageBounds, collider, false)
+        PhysicsRigidBody rigidBody = new(gameSettings.ProjectileSettings, stageBounds, collider)
         {
             Position = position,
             Rotation = rotation,

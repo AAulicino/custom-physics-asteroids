@@ -15,8 +15,13 @@ public class GameInitializer : MonoBehaviour
         StageBounds stageBounds = new(physicsUpdater, viewUpdater);
         EntitiesViewManager entitiesViewManager = new(physicsUpdater, viewUpdater);
 
+        GameSettings gameSettings = Resources.Load<GameSettings>("Settings/GameSettings");
+
         EntityFactory entityFactory = new EntityFactory(
-            new EntityModelFactory(stageBounds),
+            new EntityModelFactory(
+                stageBounds,
+                gameSettings
+            ),
             new EntityViewFactory(),
             physics,
             entitiesViewManager,
@@ -28,7 +33,8 @@ public class GameInitializer : MonoBehaviour
             physics,
             entitiesViewManager,
             stageBounds,
-            entityFactory
+            entityFactory,
+            gameSettings
         );
 
         gameSession.Initialize();

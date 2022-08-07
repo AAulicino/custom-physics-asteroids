@@ -2,17 +2,23 @@ using UnityEngine;
 
 public class PlayerView : EntityView
 {
-    [SerializeField] float movementSpeed;
-
     new IPlayerModel model;
 
-    Vector2 moveVector;
-    bool fire;
+    Vector2 moveInputs;
+    bool firing;
+
+    string horizontalInput;
+    string verticalInput;
+    string fireInput;
 
     public override void Initialize (IEntityModel model)
     {
         base.Initialize(model);
         this.model = (IPlayerModel)model;
+
+        horizontalInput = "Horizontal" + this.model.PlayerId;
+        verticalInput = "Vertical" + this.model.PlayerId;
+        fireInput = "Fire" + this.model.PlayerId;
     }
 
     public override void OnPrePhysicsStep ()
@@ -29,38 +35,15 @@ public class PlayerView : EntityView
 
     void ReadInputs ()
     {
-        moveVector = new Vector2(Input.GetAxis("Horizontal1"), Input.GetAxis("Vertical1"));
-        fire = Input.GetButton("Fire1");
+        moveInputs = new Vector2(Input.GetAxis(horizontalInput), Input.GetAxis(verticalInput));
+        firing = Input.GetButton(fireInput);
     }
 
     void WriteInputs ()
     {
-        WriteVelocity();
-        WriteRotation();
-        WriteProjectile();
-    }
+        model.RigidBody.Acceleration = moveInputs;
 
-    void WriteVelocity ()
-    {
-        model.RigidBody.Velocity = moveVector.normalized * movementSpeed;
-    }
-
-    void WriteRotation ()
-    {
-        float AngleRad = Mathf.Atan2(
-            moveVector.y,
-            moveVector.x
-        );
-
-        float angle = AngleRad * Mathf.Rad2Deg;
-
-        if (moveVector.sqrMagnitude > 0)
-            model.RigidBody.Rotation = angle - 90;
-    }
-
-    void WriteProjectile ()
-    {
-        if (fire)
+        if (firing)
             model.FireProjectile();
     }
 }

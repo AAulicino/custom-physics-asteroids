@@ -2,7 +2,6 @@ using System;
 
 public abstract class EntityModel : IEntityModel
 {
-    public event Action<Collision> OnCollision;
     public event Action<IEntityModel> OnDestroy;
     public event Action OnReadyToReceiveInputs;
 
@@ -27,7 +26,7 @@ public abstract class EntityModel : IEntityModel
         OnReadyToReceiveInputs?.Invoke();
     }
 
-    public void OnPhysicsStep (float deltaTime)
+    public virtual void OnPhysicsStep (float deltaTime)
     {
         RigidBody.Step(deltaTime);
     }

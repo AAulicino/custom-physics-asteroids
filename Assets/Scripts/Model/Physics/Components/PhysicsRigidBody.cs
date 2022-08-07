@@ -9,25 +9,38 @@ public class PhysicsRigidBody : IRigidBody
 
     public Vector2 Position { get; set; }
     public Vector2 Velocity { get; set; }
+    public Vector2 Acceleration { get; set; }
+
     public float AngularVelocity { get; set; }
     public float Rotation { get; set; }
 
-    readonly IStageBounds stageInfo;
-    readonly bool wrapOnScreenEdge;
+    public float MaxSpeed => settings.MaxSpeed;
+    public float Drag => settings.Drag;
+    public bool WrapOnScreenEdge => settings.WrapOnScreenEdge;
 
-    public PhysicsRigidBody (IStageBounds stageInfo, ICollider collider, bool wrapOnScreenEdge)
+    protected readonly IEntitySettings settings;
+    protected readonly IStageBounds stageInfo;
+
+    public PhysicsRigidBody (
+        IEntitySettings settings,
+        IStageBounds stageInfo,
+        ICollider collider
+    )
     {
+        this.settings = settings;
         this.stageInfo = stageInfo;
         Collider = collider;
-        this.wrapOnScreenEdge = wrapOnScreenEdge;
     }
 
-    public void Step (float deltaTime)
+    public virtual void Step (float deltaTime)
     {
+        Velocity = Vector2.ClampMagnitude(Velocity + Acceleration, MaxSpeed);
         Position += Velocity * deltaTime;
         Rotation += AngularVelocity * deltaTime;
 
-        if (wrapOnScreenEdge)
+        Velocity *= Drag;
+
+        if (WrapOnScreenEdge)
         {
             if (stageInfo.Rect.xMax < Position.x)
                 Position = new Vector2(stageInfo.Rect.xMin, Position.y);

@@ -1,6 +1,6 @@
 public interface IEntityViewFactory
 {
     AsteroidView CreateAsteroid ();
-    PlayerView CreatePlayer ();
+    PlayerView CreatePlayer (int playerId);
     ProjectileView CreateProjectile ();
 }

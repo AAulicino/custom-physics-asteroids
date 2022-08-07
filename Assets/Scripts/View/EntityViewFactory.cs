@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class EntityViewFactory : IEntityViewFactory
 {
-    public PlayerView CreatePlayer ()
+    public PlayerView CreatePlayer (int playerId)
     {
-        return GameObject.Instantiate(Resources.Load<PlayerView>("Player"));
+        return GameObject.Instantiate(Resources.Load<PlayerView>("Player" + playerId));
     }
 
     public AsteroidView CreateAsteroid ()
