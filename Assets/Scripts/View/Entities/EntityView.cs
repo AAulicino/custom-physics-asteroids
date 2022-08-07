@@ -8,7 +8,6 @@ public abstract class EntityView : MonoBehaviour
     [SerializeField] Vector2 bounds;
 
     protected IEntityModel model;
-
     bool modelDestroyed;
 
     public virtual void Initialize (IEntityModel model)
@@ -22,6 +21,13 @@ public abstract class EntityView : MonoBehaviour
         model.OnDestroy += HandleModelDestroyed;
     }
 
+    public void DeInitialize ()
+    {
+        model.OnReadyToReceiveInputs -= OnPrePhysicsStep;
+        model.OnDestroy -= HandleModelDestroyed;
+        modelDestroyed = false;
+    }
+
     public virtual void OnPrePhysicsStep ()
     {
     }
@@ -31,7 +37,6 @@ public abstract class EntityView : MonoBehaviour
         if (modelDestroyed)
         {
             OnDestroy?.Invoke(this);
-            Destroy(gameObject);
             return;
         }
 

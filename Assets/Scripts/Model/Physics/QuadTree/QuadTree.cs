@@ -1,4 +1,4 @@
-﻿// https://stackoverflow.com/a/48375726 further optimizations for QuadTree
+﻿// https://stackoverflow.com/a/48375726 possible optimizations for QuadTree
 
 using System;
 using System.Collections.Generic;
