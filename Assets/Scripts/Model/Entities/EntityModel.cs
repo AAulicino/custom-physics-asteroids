@@ -7,6 +7,7 @@ public abstract class EntityModel : IEntityModel
 
     public IRigidBodyModel RigidBody { get; }
     public IColliderModel Collider { get; }
+    public bool IsAlive => !destroyed;
 
     bool destroyed;
 

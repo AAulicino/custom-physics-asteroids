@@ -33,7 +33,6 @@ public class PhysicsUpdater : IDisposable, IPhysicsUpdater
 
     public void Pause (bool pause)
     {
-        Debug.Log("Pause");
         if (pause)
         {
             pauseHandler.Reset();

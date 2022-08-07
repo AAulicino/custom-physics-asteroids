@@ -10,7 +10,7 @@ public class GameInitializer : MonoBehaviour
         GameSettings gameSettings = Resources.Load<GameSettings>("Settings/GameSettings");
         PhysicsUpdater physicsUpdater = new();
 
-        IPhysicsEntityManager physics = new PhysicsEntityManager(
+        IPhysicsEntityManager physicsEntityManager = new PhysicsEntityManager(
             physicsUpdater,
             new CollisionDetector(
                 new QuadTree<IEntityModel>(
@@ -22,26 +22,24 @@ public class GameInitializer : MonoBehaviour
             )
         );
         StageBounds stageBounds = new(physicsUpdater, viewUpdater);
-        EntitiesViewManager entitiesViewManager = new(physicsUpdater, viewUpdater);
+        EntityViewFactory viewFactory = new EntityViewFactory();
 
-        EntityFactory entityFactory = new EntityFactory(
-            new EntityModelFactory(
-                stageBounds,
-                gameSettings
-            ),
-            new EntityViewFactory(),
-            physics,
-            entitiesViewManager,
-            viewUpdater
+        EntitiesViewManager entitiesViewManager = new(viewUpdater, viewFactory);
+
+        GameModelManager gameModelManager = new GameModelManager(
+            gameSettings,
+            new EntityModelFactory(stageBounds, gameSettings),
+            stageBounds,
+            physicsEntityManager
         );
 
         gameSession = new GameSessionModel(
             physicsUpdater,
-            physics,
-            entitiesViewManager,
+            physicsEntityManager,
             stageBounds,
-            entityFactory,
-            gameSettings
+            viewFactory,
+            gameModelManager,
+            entitiesViewManager
         );
 
         gameSession.Initialize();

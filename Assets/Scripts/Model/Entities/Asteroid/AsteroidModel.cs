@@ -3,7 +3,7 @@ using Random = System.Random;
 
 public class AsteroidModel : EntityModel, IAsteroidModel
 {
-    readonly IEntityFactory entityFactory;
+    readonly IEntityModelFactory entityFactory;
     readonly Random random = new();
 
     readonly int size;
@@ -12,7 +12,7 @@ public class AsteroidModel : EntityModel, IAsteroidModel
         int size,
         IRigidBodyModel rigidBody,
         IColliderModel collider,
-        IEntityFactory entityFactory
+        IEntityModelFactory entityFactory
     ) : base(rigidBody, collider)
     {
         this.entityFactory = entityFactory;

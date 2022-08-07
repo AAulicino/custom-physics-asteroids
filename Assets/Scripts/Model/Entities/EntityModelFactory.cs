@@ -1,17 +1,20 @@
+using System;
 using UnityEngine;
 
 public class EntityModelFactory : IEntityModelFactory
 {
+    public event Action<IEntityModel> OnEntityCreated;
+
     readonly IStageBounds stageBounds;
     readonly IGameSettings gameSettings;
 
-    public EntityModelFactory (IStageBounds stageInfo, IGameSettings gameSettings)
+    public EntityModelFactory (IStageBounds stageBounds, IGameSettings gameSettings)
     {
         this.gameSettings = gameSettings;
-        this.stageBounds = stageInfo;
+        this.stageBounds = stageBounds;
     }
 
-    public IPlayerModel CreatePlayer (int playerId, Vector3 position, IEntityFactory entityFactory)
+    public IPlayerModel CreatePlayer (int playerId, Vector3 position)
     {
         ColliderModel collider = new(CollisionLayer.Player);
         RigidBodyModel rigidBody = new(gameSettings.PlayerSettings, stageBounds, collider)
@@ -20,20 +23,21 @@ public class EntityModelFactory : IEntityModelFactory
         };
         rigidBody.SyncComponents();
 
-        return new PlayerModel(
+        PlayerModel player = new PlayerModel(
             playerId,
             gameSettings.PlayerSettings,
             rigidBody,
             collider,
-            entityFactory
+            this
         );
+        OnEntityCreated(player);
+        return player;
     }
 
     public IAsteroidModel CreateAsteroid (
         int size,
         Vector3 Position,
-        Vector3 velocity,
-        IEntityFactory entityFactory
+        Vector3 velocity
     )
     {
         ColliderModel collider = new(CollisionLayer.Asteroid);
@@ -44,7 +48,9 @@ public class EntityModelFactory : IEntityModelFactory
         };
         rigidBody.SyncComponents();
 
-        return new AsteroidModel(size, rigidBody, collider, entityFactory);
+        AsteroidModel asteroid = new AsteroidModel(size, rigidBody, collider, this);
+        OnEntityCreated(asteroid);
+        return asteroid;
     }
 
     public IProjectileModel CreateProjectile (Vector3 position, float rotation, Vector3 velocity)
@@ -59,6 +65,8 @@ public class EntityModelFactory : IEntityModelFactory
         };
         rigidBody.SyncComponents();
 
-        return new ProjectileModel(rigidBody, collider);
+        ProjectileModel projectile = new ProjectileModel(rigidBody, collider);
+        OnEntityCreated(projectile);
+        return projectile;
     }
 }

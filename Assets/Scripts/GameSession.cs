@@ -1,30 +1,28 @@
 using System;
-using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class GameSessionModel : IDisposable
 {
     readonly IPhysicsUpdater physicsUpdater;
-    readonly IEntitiesViewManager entitiesViewManager;
 
     readonly IStageBounds stageBounds;
-    readonly IEntityFactory entityFactory;
-    readonly IGameSettings gameSettings;
+    readonly IEntityViewFactory viewFactory;
+    readonly IGameModelManager gameModelManager;
+    readonly IEntitiesViewManager viewManager;
     readonly IPhysicsEntityManager physics;
 
     public GameSessionModel (
         IPhysicsUpdater updater,
         IPhysicsEntityManager physics,
-        IEntitiesViewManager entitiesViewManager,
         IStageBounds stageBounds,
-        IEntityFactory entityFactory,
-        IGameSettings gameSettings
+        IEntityViewFactory viewFactory,
+        IGameModelManager gameModelManager,
+        IEntitiesViewManager viewManager
     )
     {
-        this.entitiesViewManager = entitiesViewManager;
         this.stageBounds = stageBounds;
-        this.entityFactory = entityFactory;
-        this.gameSettings = gameSettings;
+        this.viewFactory = viewFactory;
+        this.gameModelManager = gameModelManager;
+        this.viewManager = viewManager;
         this.physicsUpdater = updater;
         this.physics = physics;
     }
@@ -32,11 +30,16 @@ public class GameSessionModel : IDisposable
     public void Initialize ()
     {
         physics.Initialize();
-        entitiesViewManager.Initialize();
+        viewManager.Initialize();
         stageBounds.Initialize();
 
-        CreatePlayers();
-        CreateAsteroids();
+        gameModelManager.OnEntityCreated += HandleEntityCreated;
+        gameModelManager.Initialize();
+    }
+
+    void HandleEntityCreated (IEntityModel entity)
+    {
+        viewManager.CreateEntity(entity);
     }
 
     public void Pause (bool pause)
@@ -44,26 +47,9 @@ public class GameSessionModel : IDisposable
         physicsUpdater.Pause(pause);
     }
 
-    void CreatePlayers ()
-    {
-        entityFactory.CreatePlayer(1, Vector3.left);
-        entityFactory.CreatePlayer(2, Vector3.right);
-    }
-
-    void CreateAsteroids ()
-    {
-        for (int i = 0; i < gameSettings.AsteroidSettings.StartingCount; i++)
-        {
-            entityFactory.CreateAsteroid(
-                gameSettings.AsteroidSettings.StartingSize,
-                stageBounds.RandomPointNearEdge(),
-                new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f))
-            );
-        }
-    }
-
     public void Dispose ()
     {
+        gameModelManager.OnEntityCreated -= HandleEntityCreated;
         stageBounds.Dispose();
         physicsUpdater.Dispose();
         physics.Dispose();

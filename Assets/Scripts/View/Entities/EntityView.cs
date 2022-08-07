@@ -8,7 +8,7 @@ public abstract class EntityView : MonoBehaviour
     [SerializeField] Vector2 bounds;
 
     protected IEntityModel model;
-    bool modelDestroyed;
+    bool ModelDestroyed => !model.IsAlive;
 
     public virtual void Initialize (IEntityModel model)
     {
@@ -18,14 +18,11 @@ public abstract class EntityView : MonoBehaviour
         transform.localScale = Vector3.one * model.Collider.Scale;
 
         model.OnReadyToReceiveInputs += OnPrePhysicsStep;
-        model.OnDestroy += HandleModelDestroyed;
     }
 
     public void DeInitialize ()
     {
         model.OnReadyToReceiveInputs -= OnPrePhysicsStep;
-        model.OnDestroy -= HandleModelDestroyed;
-        modelDestroyed = false;
     }
 
     public virtual void OnPrePhysicsStep ()
@@ -34,7 +31,7 @@ public abstract class EntityView : MonoBehaviour
 
     public virtual void OnViewUpdate ()
     {
-        if (modelDestroyed)
+        if (ModelDestroyed)
         {
             OnDestroy?.Invoke(this);
             return;
@@ -42,12 +39,6 @@ public abstract class EntityView : MonoBehaviour
 
         transform.position = model.RigidBody.Position;
         transform.rotation = Quaternion.Euler(0, 0, model.RigidBody.Rotation);
-    }
-
-    void HandleModelDestroyed (IEntityModel model)
-    {
-        model.OnDestroy -= HandleModelDestroyed;
-        modelDestroyed = true;
     }
 
     void OnDrawGizmosSelected ()

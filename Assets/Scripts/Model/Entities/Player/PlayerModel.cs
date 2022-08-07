@@ -6,7 +6,7 @@ public class PlayerModel : EntityModel, IPlayerModel
     public int PlayerId { get; private set; }
 
     readonly IPlayerSettings playerSettings;
-    readonly IEntityFactory entityFactory;
+    readonly IEntityModelFactory entityFactory;
     readonly Stopwatch watch = Stopwatch.StartNew();
 
     public PlayerModel (
@@ -14,7 +14,7 @@ public class PlayerModel : EntityModel, IPlayerModel
         IPlayerSettings playerSettings,
         IRigidBodyModel rigidBody,
         IColliderModel collider,
-        IEntityFactory entityFactory
+        IEntityModelFactory entityFactory
     ) : base(rigidBody, collider)
     {
         PlayerId = playerId;

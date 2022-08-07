@@ -7,6 +7,7 @@ public interface IEntityModel
 
     IRigidBodyModel RigidBody { get; }
     IColliderModel Collider { get; }
+    bool IsAlive { get; }
 
     void OnPrePhysicsStep ();
     void OnPhysicsStep (float deltaTime);
