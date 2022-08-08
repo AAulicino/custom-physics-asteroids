@@ -41,6 +41,7 @@ public abstract class EntityModel : IEntityModel
 
     public virtual void OnCollide (Collision collision)
     {
+        Destroy();
     }
 
     public void Destroy ()

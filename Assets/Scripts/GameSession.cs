@@ -25,6 +25,8 @@ public class GameSessionModel : IDisposable
         this.viewManager = viewManager;
         this.physicsUpdater = updater;
         this.physics = physics;
+
+        gameModelManager.OnGameEnd += HandleGameEnd;
     }
 
     public void Initialize ()
@@ -44,7 +46,12 @@ public class GameSessionModel : IDisposable
 
     public void Pause (bool pause)
     {
-        physicsUpdater.Pause(pause);
+        physicsUpdater.Pause(pause || gameModelManager.GameEnded);
+    }
+
+    void HandleGameEnd (bool obj)
+    {
+        Pause(true);
     }
 
     public void Dispose ()

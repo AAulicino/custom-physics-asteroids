@@ -25,7 +25,7 @@ public class StageBounds : IStageBounds
 
     public Vector2 RandomPointNearEdge ()
     {
-        return Rect.center + Random.insideUnitCircle * Rect.size.magnitude / 2;
+        return Rect.center + Random.insideUnitCircle.normalized * Rect.size.magnitude / 2;
     }
 
     void RefreshLocalBounds ()
