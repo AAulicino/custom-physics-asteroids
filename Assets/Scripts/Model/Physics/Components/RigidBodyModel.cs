@@ -59,6 +59,6 @@ public class RigidBodyModel : IRigidBodyModel
 
     public void SyncComponents ()
     {
-        Collider.SetPosition(Position);
+        Collider.Position = Position;
     }
 }

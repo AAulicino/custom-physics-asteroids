@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc137726ccece40e09a0a96d31e65220, type: 3}
   m_Name: GameSettings
   m_EditorClassIdentifier: 
+  physicsSettings:
+    <TimeStep>k__BackingField: 0.02
+    <MaxTimeStep>k__BackingField: 0.3
   playerSettings:
     <MaxSpeed>k__BackingField: 6
     <WrapOnScreenEdge>k__BackingField: 1
@@ -27,4 +30,6 @@ MonoBehaviour:
     <MaxSpeed>k__BackingField: 10
     <WrapOnScreenEdge>k__BackingField: 0
     <Drag>k__BackingField: 1
-  <RenderCollisionQuadTree>k__BackingField: 0
+  debugSettings:
+    <RenderCollisionQuadTree>k__BackingField: 0
+    <RenderColliders>k__BackingField: 0

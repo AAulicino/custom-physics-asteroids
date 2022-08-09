@@ -7,11 +7,14 @@ public abstract class EntityView : MonoBehaviour
 
     [SerializeField] Vector2 bounds;
 
-    protected IEntityModel model;
     bool ModelDestroyed => !model.IsAlive;
 
-    public virtual void Initialize (IEntityModel model)
+    protected IEntityModel model;
+    IDebugSettings debugSettings;
+
+    public virtual void Initialize (IEntityModel model, IDebugSettings debugSettings)
     {
+        this.debugSettings = debugSettings;
         this.model = model;
 
         model.Collider.SetSize(bounds);
@@ -41,18 +44,26 @@ public abstract class EntityView : MonoBehaviour
         transform.rotation = Quaternion.Euler(0, 0, model.RigidBody.Rotation);
     }
 
-    void OnDrawGizmosSelected ()
+    void OnDrawGizmos ()
     {
-        DebugExtension.DrawRect(
-            new Rect(
-                transform.position.x - bounds.x / 2,
-                transform.position.y - bounds.y / 2,
-                bounds.x,
-                bounds.y
-            ),
-            Color.red
-        );
-        if (model != null)
-            DebugExtension.DrawRect(model.Collider.Bounds, Color.green);
+        if (model is null || !debugSettings.RenderColliders)
+            return;
+
+        if (model.Collider is CircleColliderModel circle)
+        {
+            DebugExtension.DrawCircle(
+                circle.Bounds.center,
+                Vector3.back,
+                Color.green,
+                circle.Radius
+            );
+        }
+        else if (model.Collider is SquareColliderModel rect)
+        {
+            DebugExtension.DrawRect(
+                rect.Bounds,
+                Color.green
+            );
+        }
     }
 }

@@ -5,21 +5,24 @@ using Debug = UnityEngine.Debug;
 
 public class PhysicsUpdater : IDisposable, IPhysicsUpdater
 {
-    const float MAX_DELTA = 0.3f;
-    const float FIXED_TIME_STEP = 0.02f;
-
     public event Action OnPreStep;
     public event Action<float> OnStep;
     public event Action OnPostStep;
 
     readonly Stopwatch time = Stopwatch.StartNew();
     readonly ManualResetEvent pauseHandler = new(true);
+    readonly IPhysicsSettings settings;
 
     Thread physicsThread;
     bool keepRunning;
 
     double currentTime;
     double accumulator;
+
+    public PhysicsUpdater (IPhysicsSettings settings)
+    {
+        this.settings = settings;
+    }
 
     public void Initialize ()
     {
@@ -55,16 +58,16 @@ public class PhysicsUpdater : IDisposable, IPhysicsUpdater
                 double newTime = time.Elapsed.TotalSeconds;
                 double frameTime = newTime - currentTime;
 
-                if (frameTime > MAX_DELTA)
-                    frameTime = MAX_DELTA;
+                if (frameTime > settings.MaxTimeStep)
+                    frameTime = settings.MaxTimeStep;
 
                 currentTime = newTime;
 
                 accumulator += frameTime;
 
-                while (accumulator >= FIXED_TIME_STEP)
+                while (accumulator >= settings.TimeStep)
                 {
-                    double deltaTime = FIXED_TIME_STEP;
+                    double deltaTime = settings.TimeStep;
 
                     OnPreStep?.Invoke();
                     OnStep?.Invoke((float)deltaTime);

@@ -8,7 +8,7 @@ public class GameInitializer : MonoBehaviour
     {
         ViewUpdater viewUpdater = new GameObject("ViewUpdater").AddComponent<ViewUpdater>();
         GameSettings gameSettings = Resources.Load<GameSettings>("Settings/GameSettings");
-        PhysicsUpdater physicsUpdater = new();
+        PhysicsUpdater physicsUpdater = new(gameSettings.PhysicsSettings);
 
         IPhysicsEntityManager physicsEntityManager = new PhysicsEntityManager(
             physicsUpdater,
@@ -18,13 +18,18 @@ public class GameInitializer : MonoBehaviour
                     Camera.main.ViewportToWorldPoint(Vector2.one),
                     new EntityBounds()
                 ),
-                gameSettings
+                gameSettings.PhysicsSettings,
+                gameSettings.DebugSettings
             )
         );
         StageBounds stageBounds = new(physicsUpdater, viewUpdater);
         EntityViewFactory viewFactory = new EntityViewFactory();
 
-        EntitiesViewManager entitiesViewManager = new(viewUpdater, viewFactory);
+        EntitiesViewManager entitiesViewManager = new(
+            viewUpdater,
+            viewFactory,
+            gameSettings.DebugSettings
+        );
 
         GameModelManager gameModelManager = new GameModelManager(
             gameSettings,

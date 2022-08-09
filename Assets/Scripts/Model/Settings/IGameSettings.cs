@@ -1,10 +1,10 @@
 public interface IGameSettings
 {
-    float TimeStep { get; }
+    IPhysicsSettings PhysicsSettings { get; }
 
     IPlayerSettings PlayerSettings { get; }
     IAsteroidSettings AsteroidSettings { get; }
     IEntitySettings ProjectileSettings { get; }
 
-    bool RenderCollisionQuadTree { get; }
+    IDebugSettings DebugSettings { get; }
 }

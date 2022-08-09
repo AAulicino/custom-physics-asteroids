@@ -5,16 +5,19 @@ public class EntitiesViewManager : IEntitiesViewManager
 {
     readonly IViewUpdater viewUpdater;
     readonly EntityViewFactory viewFactory;
+    readonly IDebugSettings debugSettings;
     readonly HashSet<EntityView> activeEntities = new();
     readonly Queue<AddOrRemoveOperation<object>> operations = new();
 
     public EntitiesViewManager (
         IViewUpdater viewUpdater,
-        EntityViewFactory viewFactory
+        EntityViewFactory viewFactory,
+        IDebugSettings debugSettings
     )
     {
         this.viewUpdater = viewUpdater;
         this.viewFactory = viewFactory;
+        this.debugSettings = debugSettings;
     }
 
     public void Initialize ()
@@ -57,7 +60,7 @@ public class EntitiesViewManager : IEntitiesViewManager
             _ => throw new ArgumentException($"Unknown entity type: {entity.GetType()}"),
         };
         view.OnDestroy += HandleEntityDestroyed;
-        view.Initialize(entity);
+        view.Initialize(entity, debugSettings);
         return view;
     }
 

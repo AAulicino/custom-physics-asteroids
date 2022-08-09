@@ -11,9 +11,9 @@ public class PlayerView : EntityView
     string verticalInput;
     string fireInput;
 
-    public override void Initialize (IEntityModel model)
+    public override void Initialize (IEntityModel model, IDebugSettings debugSettings)
     {
-        base.Initialize(model);
+        base.Initialize(model, debugSettings);
         this.model = (IPlayerModel)model;
 
         horizontalInput = "Horizontal" + this.model.PlayerId;

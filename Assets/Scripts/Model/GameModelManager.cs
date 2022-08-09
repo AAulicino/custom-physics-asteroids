@@ -46,7 +46,6 @@ public class GameModelManager : IGameModelManager
 
     void CreateAsteroids ()
     {
-        Debug.DrawLine(stageBounds.RandomPointNearEdge(), stageBounds.RandomPointNearEdge(), Color.red, 10f);
         for (int i = 0; i < settings.AsteroidSettings.StartingCount; i++)
         {
             entityModelFactory.CreateAsteroid(
