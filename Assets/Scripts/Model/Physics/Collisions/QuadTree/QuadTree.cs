@@ -10,7 +10,7 @@ public class QuadTree<T> : IQuadTree<T>
     public int MaxObjects { get; }
     public int MaxDepthLevel { get; }
     public int ObjectCount { get; private set; }
-    public QuadTreeRect MainRect { get; }
+    public QuadTreeRect MainRect { get; private set; }
 
     readonly IQuadTreeObjectBounds<T> objectBounds;
     Sector<T> rootSector;
@@ -67,6 +67,12 @@ public class QuadTree<T> : IQuadTree<T>
 
         foreach (T obj in objects)
             Insert(obj);
+    }
+
+    public void ClearAndUpdateMainRect (Rect mainRect)
+    {
+        MainRect = new QuadTreeRect(mainRect.xMin, mainRect.yMin, mainRect.width, mainRect.height);
+        Clear();
     }
 
     public void Clear ()

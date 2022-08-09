@@ -6,49 +6,8 @@ public class GameInitializer : MonoBehaviour
 
     void Awake ()
     {
-        ViewUpdater viewUpdater = new GameObject("ViewUpdater").AddComponent<ViewUpdater>();
-        GameSettings gameSettings = Resources.Load<GameSettings>("Settings/GameSettings");
-        PhysicsUpdater physicsUpdater = new(gameSettings.PhysicsSettings);
-
-        IPhysicsEntityManager physicsEntityManager = new PhysicsEntityManager(
-            physicsUpdater,
-            new CollisionDetector(
-                new QuadTree<IEntityModel>(
-                    Camera.main.ViewportToWorldPoint(Vector2.zero),
-                    Camera.main.ViewportToWorldPoint(Vector2.one),
-                    new EntityBounds()
-                ),
-                gameSettings.PhysicsSettings,
-                gameSettings.DebugSettings
-            )
-        );
-        StageBounds stageBounds = new(physicsUpdater, viewUpdater);
-        EntityViewFactory viewFactory = new EntityViewFactory();
-
-        EntitiesViewManager entitiesViewManager = new(
-            viewUpdater,
-            viewFactory,
-            gameSettings.DebugSettings
-        );
-
-        GameModelManager gameModelManager = new GameModelManager(
-            gameSettings,
-            new EntityModelFactory(stageBounds, gameSettings),
-            stageBounds,
-            physicsEntityManager
-        );
-
-        gameSession = new GameSessionModel(
-            physicsUpdater,
-            physicsEntityManager,
-            stageBounds,
-            viewFactory,
-            gameModelManager,
-            entitiesViewManager
-        );
-
+        gameSession = GameSessionFactory.Create();
         gameSession.Initialize();
-
         ListenToEditorPause();
     }
 

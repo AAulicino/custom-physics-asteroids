@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 public interface IQuadTree<T>
 {
@@ -9,8 +10,8 @@ public interface IQuadTree<T>
 
     IEnumerable<QuadTreeRect> GetGrid ();
     IEnumerable<T> GetNearestObjects (T obj);
-
     bool Insert (T obj);
     void InsertRange (IEnumerable<T> objects);
     void Clear ();
+    void ClearAndUpdateMainRect (Rect mainRect);
 }

@@ -3,17 +3,20 @@ using UnityEngine;
 
 public class CollisionDetector
 {
-    readonly IQuadTree<IEntityModel> quadTree;
     readonly IPhysicsSettings physicsSettings;
     readonly IDebugSettings gameSettings;
+    readonly IStageBounds stageBounds;
+    readonly IQuadTree<IEntityModel> quadTree;
 
     public CollisionDetector (
         IQuadTree<IEntityModel> quadTree,
         IPhysicsSettings physicsSettings,
-        IDebugSettings debugSettings
+        IDebugSettings debugSettings,
+        IStageBounds stageBounds
     )
     {
         this.gameSettings = debugSettings;
+        this.stageBounds = stageBounds;
         this.quadTree = quadTree;
         this.physicsSettings = physicsSettings;
     }
@@ -23,7 +26,7 @@ public class CollisionDetector
         List<Collision> collisionsBuffer
     )
     {
-        quadTree.Clear();
+        quadTree.ClearAndUpdateMainRect(stageBounds.Rect);
         quadTree.InsertRange(entities);
 
         if (gameSettings.RenderCollisionQuadTree)

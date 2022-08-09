@@ -31,5 +31,5 @@ MonoBehaviour:
     <WrapOnScreenEdge>k__BackingField: 0
     <Drag>k__BackingField: 1
   debugSettings:
-    <RenderCollisionQuadTree>k__BackingField: 0
-    <RenderColliders>k__BackingField: 0
+    <RenderCollisionQuadTree>k__BackingField: 1
+    <RenderColliders>k__BackingField: 1
