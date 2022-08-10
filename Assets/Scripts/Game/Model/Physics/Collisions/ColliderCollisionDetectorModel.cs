@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ColliderCollisionDetector : IColliderCollisionDetector
+public class ColliderCollisionDetectorModel : IColliderCollisionDetectorModel
 {
     public bool IsColliding (ICircleColliderModel a, ICircleColliderModel b)
     {

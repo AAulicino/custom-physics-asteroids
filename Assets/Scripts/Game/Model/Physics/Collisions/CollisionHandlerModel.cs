@@ -1,20 +1,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CollisionHandler : ICollisionHandler
+public class CollisionHandlerModel : ICollisionHandlerModel
 {
     readonly IPhysicsSettings physicsSettings;
     readonly IDebugSettings gameSettings;
     readonly IStageBounds stageBounds;
-    readonly IColliderCollisionDetector colliderCollisions;
+    readonly IColliderCollisionDetectorModel colliderCollisions;
     readonly IQuadTree<IEntityModel> quadTree;
 
-    public CollisionHandler (
+    public CollisionHandlerModel (
         IQuadTree<IEntityModel> quadTree,
         IPhysicsSettings physicsSettings,
         IDebugSettings debugSettings,
         IStageBounds stageBounds,
-        IColliderCollisionDetector shapeCollisions
+        IColliderCollisionDetectorModel shapeCollisions
     )
     {
         this.gameSettings = debugSettings;

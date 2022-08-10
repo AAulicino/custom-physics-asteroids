@@ -7,13 +7,13 @@ namespace GameTests.Physics.Collisions
 {
     public class CollisionHandlerTests
     {
-        public CollisionHandler Model { get; private set; }
+        public CollisionHandlerModel Model { get; private set; }
 
         public IQuadTree<IEntityModel> QuadTree { get; private set; }
         public IPhysicsSettings PhysicsSettings { get; private set; }
         public IDebugSettings DebugSettings { get; private set; }
         public IStageBounds StageBounds { get; private set; }
-        public IColliderCollisionDetector ColliderCollisionsDetector { get; private set; }
+        public IColliderCollisionDetectorModel ColliderCollisionsDetector { get; private set; }
 
         [SetUp]
         public void Setup ()
@@ -22,9 +22,9 @@ namespace GameTests.Physics.Collisions
             PhysicsSettings = Substitute.For<IPhysicsSettings>();
             DebugSettings = Substitute.For<IDebugSettings>();
             StageBounds = Substitute.For<IStageBounds>();
-            ColliderCollisionsDetector = Substitute.For<IColliderCollisionDetector>();
+            ColliderCollisionsDetector = Substitute.For<IColliderCollisionDetectorModel>();
 
-            Model = new CollisionHandler(
+            Model = new CollisionHandlerModel(
                 QuadTree,
                 PhysicsSettings,
                 DebugSettings,

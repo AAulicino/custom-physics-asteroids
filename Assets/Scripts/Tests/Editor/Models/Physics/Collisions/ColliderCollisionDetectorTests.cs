@@ -2,16 +2,16 @@ using NSubstitute;
 using NUnit.Framework;
 using UnityEngine;
 
-namespace GameTests.Physics.Collisions
+namespace GameTests.Physics.Collisions.ColliderCollisionDetector
 {
     public class ColliderCollisionDetectorTests
     {
-        public ColliderCollisionDetector Model { get; private set; }
+        public ColliderCollisionDetectorModel Model { get; private set; }
 
         [SetUp]
         public void Setup ()
         {
-            Model = new ColliderCollisionDetector();
+            Model = new ColliderCollisionDetectorModel();
         }
 
         class IsColliding_CircleCircle : ColliderCollisionDetectorTests

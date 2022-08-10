@@ -1,4 +1,4 @@
-public interface IColliderCollisionDetector
+public interface IColliderCollisionDetectorModel
 {
     bool LayerCollidesWith (CollisionLayer a, CollisionLayer b);
 
