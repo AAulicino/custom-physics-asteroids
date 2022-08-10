@@ -63,7 +63,7 @@ public class GameContextModel : IDisposable
             entityModelFactory.CreateAsteroid(
                 settings.AsteroidSettings.StartingSize,
                 stageBounds.RandomPointNearEdge(),
-                new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f))
+                new Vector2(Random.Range(-2f, 2f), Random.Range(-2f, 2f))
             );
         }
     }
