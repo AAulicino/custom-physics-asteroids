@@ -5,11 +5,11 @@ public class StageBounds : IStageBounds
     public Rect Rect { get; set; }
 
     readonly IPhysicsUpdater physicsUpdater;
-    readonly IViewUpdater viewUpdater;
+    readonly IUnityUpdater viewUpdater;
 
     Rect localRect;
 
-    public StageBounds (IPhysicsUpdater physicsUpdater, IViewUpdater viewUpdater)
+    public StageBounds (IPhysicsUpdater physicsUpdater, IUnityUpdater viewUpdater)
     {
         this.viewUpdater = viewUpdater;
         this.physicsUpdater = physicsUpdater;

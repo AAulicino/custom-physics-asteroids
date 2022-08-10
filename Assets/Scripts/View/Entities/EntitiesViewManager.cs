@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 public class EntitiesViewManager : IEntitiesViewManager
 {
-    readonly IViewUpdater viewUpdater;
+    readonly IUnityUpdater viewUpdater;
     readonly EntityViewFactory viewFactory;
     readonly IDebugSettings debugSettings;
     readonly HashSet<EntityView> activeEntities = new();
     readonly Queue<AddOrRemoveOperation<object>> operations = new();
 
     public EntitiesViewManager (
-        IViewUpdater viewUpdater,
+        IUnityUpdater viewUpdater,
         EntityViewFactory viewFactory,
         IDebugSettings debugSettings
     )
@@ -70,5 +70,12 @@ public class EntitiesViewManager : IEntitiesViewManager
 
         lock (operations)
             operations.Enqueue(new AddOrRemoveOperation<object>(false, entity));
+    }
+
+    public void Dispose ()
+    {
+        lock (operations)
+            operations.Clear();
+        viewFactory.Dispose();
     }
 }

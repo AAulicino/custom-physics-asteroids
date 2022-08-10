@@ -2,11 +2,14 @@ using UnityEngine;
 
 public class GameInitializer : MonoBehaviour
 {
-    GameSessionModel gameSession;
+    GameSession gameSession;
 
     void Awake ()
     {
-        gameSession = GameSessionFactory.Create();
+        UnityUpdater viewUpdater = new GameObject("ViewUpdater").AddComponent<UnityUpdater>();
+        GameSettings gameSettings = Resources.Load<GameSettings>("Settings/GameSettings");
+
+        gameSession = new GameSession(viewUpdater, gameSettings);
         gameSession.Initialize();
         ListenToEditorPause();
     }

@@ -1,6 +1,8 @@
 using System;
 
-public interface IViewUpdater
+public interface IUnityUpdater
 {
     event Action OnUpdate;
+
+    void Schedule (Action action);
 }

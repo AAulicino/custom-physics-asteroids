@@ -3,39 +3,51 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class GameModelManager : IGameModelManager
+public class GameContextModel : IDisposable
 {
     public event Action<IEntityModel> OnEntityCreated;
     public event Action<bool> OnGameEnd;
 
-    public bool GameEnded { get; private set; }
+    readonly IPhysicsUpdater physicsUpdater;
 
-    readonly IEntityModelFactory entityModelFactory;
     readonly IStageBounds stageBounds;
     readonly IPhysicsEntityManager physicsEntityManager;
+    readonly IEntityModelFactory entityModelFactory;
     readonly IGameSettings settings;
 
     readonly List<IEntityModel> activePlayers = new();
     readonly List<IEntityModel> activeAsteroids = new();
 
-    public GameModelManager (
-        IGameSettings settings,
-        IEntityModelFactory entityModelFactory,
+    bool gameEnded;
+
+    public GameContextModel (
+        IPhysicsUpdater physicsUpdater,
+        IPhysicsEntityManager physicsEntityManager,
         IStageBounds stageBounds,
-        IPhysicsEntityManager physicsEntityManager
+        IGameSettings settings,
+        IEntityModelFactory entityModelFactory
     )
     {
+        this.stageBounds = stageBounds;
+        this.physicsUpdater = physicsUpdater;
+        this.physicsEntityManager = physicsEntityManager;
         this.settings = settings;
         this.entityModelFactory = entityModelFactory;
-        this.stageBounds = stageBounds;
-        this.physicsEntityManager = physicsEntityManager;
+
         entityModelFactory.OnEntityCreated += HandleEntityCreated;
     }
 
     public void Initialize ()
     {
+        physicsEntityManager.Initialize();
+        stageBounds.Initialize();
         CreatePlayers();
         CreateAsteroids();
+    }
+
+    public void Pause (bool pause)
+    {
+        physicsUpdater.Pause(pause || gameEnded);
     }
 
     void CreatePlayers ()
@@ -85,10 +97,7 @@ public class GameModelManager : IGameModelManager
         activeAsteroids.Remove(asteroid);
 
         if (activeAsteroids.Count == 0)
-        {
-            OnGameEnd?.Invoke(true);
-            GameEnded = true;
-        }
+            HandleGameEnd(true);
     }
 
     void HandlePlayerDestroyed (IEntityModel player)
@@ -97,9 +106,27 @@ public class GameModelManager : IGameModelManager
         activePlayers.Remove(player);
 
         if (activePlayers.Count == 0)
-        {
-            OnGameEnd?.Invoke(false);
-            GameEnded = true;
-        }
+            HandleGameEnd(false);
+    }
+
+    void HandleGameEnd (bool ended)
+    {
+        OnGameEnd?.Invoke(ended);
+        gameEnded = true;
+    }
+
+    public void Dispose ()
+    {
+        foreach (IEntityModel player in activePlayers)
+            player.Destroy();
+        foreach (IEntityModel asteroid in activeAsteroids)
+            asteroid.Destroy();
+
+        activePlayers.Clear();
+        activeAsteroids.Clear();
+
+        stageBounds.Dispose();
+        physicsUpdater.Dispose();
+        physicsEntityManager.Dispose();
     }
 }
