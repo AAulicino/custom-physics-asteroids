@@ -8,6 +8,7 @@ public class CollisionHandlerModel : ICollisionHandlerModel
     readonly IStageBounds stageBounds;
     readonly IColliderCollisionDetectorModel colliderCollisions;
     readonly IQuadTree<IEntityModel> quadTree;
+    readonly HashSet<IEntityModel> quadTreeObjectsBuffer = new();
 
     public CollisionHandlerModel (
         IQuadTree<IEntityModel> quadTree,
@@ -42,7 +43,10 @@ public class CollisionHandlerModel : ICollisionHandlerModel
             IEntityModel current = entities[i];
             IColliderModel collider = current.Collider;
 
-            foreach (IEntityModel other in quadTree.GetNearestObjects(current))
+            quadTreeObjectsBuffer.Clear();
+            quadTree.GetNearestObjects(current, quadTreeObjectsBuffer);
+
+            foreach (IEntityModel other in quadTreeObjectsBuffer)
             {
                 if (current == other)
                     continue;

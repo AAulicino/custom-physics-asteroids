@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 public class NodeSector<T> : Sector<T>
 {
@@ -105,8 +104,25 @@ public class NodeSector<T> : Sector<T>
         sectors[BOTTOM_RIGHT] = null;
     }
 
-    public override IEnumerable<T> GetNearestObjects (T obj)
-        => GetSectors(obj).SelectMany(s => s.GetNearestObjects(obj));
+    public override void GetNearestObjects (T obj, HashSet<T> objectsBuffer)
+    {
+        if (IsLeft(obj))
+        {
+            if (IsTop(obj))
+                sectors[TOP_LEFT].GetNearestObjects(obj, objectsBuffer);
+            if (IsBottom(obj))
+                sectors[BOTTOM_LEFT].GetNearestObjects(obj, objectsBuffer);
+        }
+
+        if (IsRight(obj))
+        {
+            if (IsTop(obj))
+                sectors[TOP_RIGHT].GetNearestObjects(obj, objectsBuffer);
+
+            if (IsBottom(obj))
+                sectors[BOTTOM_RIGHT].GetNearestObjects(obj, objectsBuffer);
+        }
+    }
 
     public override IEnumerable<QuadTreeRect> GetRects ()
     {
@@ -125,24 +141,6 @@ public class NodeSector<T> : Sector<T>
             yield return rect;
     }
 
-    IEnumerable<Sector<T>> GetSectors (T obj)
-    {
-        if (IsLeft(obj))
-        {
-            if (IsTop(obj))
-                yield return sectors[TOP_LEFT];
-            if (IsBottom(obj))
-                yield return sectors[BOTTOM_LEFT];
-        }
-
-        if (IsRight(obj))
-        {
-            if (IsTop(obj))
-                yield return sectors[TOP_RIGHT];
-            if (IsBottom(obj))
-                yield return sectors[BOTTOM_RIGHT];
-        }
-    }
 
     bool IsTop (T obj) => IsTop(ObjectBounds.GetTop(obj));
     bool IsBottom (T obj) => IsBottom(ObjectBounds.GetBottom(obj));

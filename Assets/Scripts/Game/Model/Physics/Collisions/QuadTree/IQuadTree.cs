@@ -9,7 +9,7 @@ public interface IQuadTree<T>
     QuadTreeRect MainRect { get; }
 
     IEnumerable<QuadTreeRect> GetGrid ();
-    IEnumerable<T> GetNearestObjects (T obj);
+    void GetNearestObjects (T obj, HashSet<T> objects);
     bool Insert (T obj);
     void InsertRange (IEnumerable<T> objects);
     void Clear ();

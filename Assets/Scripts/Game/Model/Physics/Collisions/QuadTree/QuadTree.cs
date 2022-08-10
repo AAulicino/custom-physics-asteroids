@@ -90,11 +90,13 @@ public class QuadTree<T> : IQuadTree<T>
         ObjectCount = 0;
     }
 
-    public IEnumerable<T> GetNearestObjects (T obj)
+    public void GetNearestObjects (T obj, HashSet<T> objects)
     {
         if (obj == null)
             throw new ArgumentNullException(nameof(obj));
-        return rootSector.GetNearestObjects(obj).Distinct();
+
+        objects.Clear();
+        rootSector.GetNearestObjects(obj, objects);
     }
 
     public IEnumerable<QuadTreeRect> GetGrid () => rootSector.GetRects();

@@ -34,7 +34,11 @@ public class LeafSector<T> : Sector<T>
         return node;
     }
 
-    public override IEnumerable<T> GetNearestObjects (T obj) => objects;
+    public override void GetNearestObjects (T _, HashSet<T> objectsBuffer)
+    {
+        foreach (T obj in objects)
+            objectsBuffer.Add(obj);
+    }
 
     public override IEnumerable<QuadTreeRect> GetRects ()
     {

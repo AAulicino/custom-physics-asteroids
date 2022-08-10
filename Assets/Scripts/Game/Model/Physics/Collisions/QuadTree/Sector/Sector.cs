@@ -43,6 +43,6 @@ public abstract class Sector<T>
     public abstract bool TryInsert (T obj);
     public abstract Sector<T> Quarter ();
 
-    public abstract IEnumerable<T> GetNearestObjects (T obj);
+    public abstract void GetNearestObjects (T obj, HashSet<T> objectsBuffer);
     public abstract IEnumerable<QuadTreeRect> GetRects ();
 }

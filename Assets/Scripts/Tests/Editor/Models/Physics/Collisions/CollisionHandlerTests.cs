@@ -50,6 +50,15 @@ namespace GameTests.Physics.Collisions
             return entity;
         }
 
+        public ref HashSet<IEntityModel> AddToBuffer (params IEntityModel[] entities)
+        {
+            return ref Arg.Do<HashSet<IEntityModel>>(x =>
+            {
+                foreach (IEntityModel entity in entities)
+                    x.Add(entity);
+            });
+        }
+
         class DetectCollisions : CollisionHandlerTests
         {
             public readonly List<Collision> collisions = new List<Collision>();
@@ -96,7 +105,10 @@ namespace GameTests.Physics.Collisions
 
                     Model.DetectCollisions(entities, collisions);
 
-                    QuadTree.Received(1).GetNearestObjects(expected);
+                    QuadTree.Received(1).GetNearestObjects(
+                        expected,
+                        Arg.Any<HashSet<IEntityModel>>()
+                    );
                 }
             }
 
@@ -109,7 +121,8 @@ namespace GameTests.Physics.Collisions
                     IEntityModel b = CreateEntity<IColliderModel>(CollisionLayer.Asteroid);
 
                     IEntityModel[] entities = { a, b };
-                    QuadTree.GetNearestObjects(a).Returns(new[] { b });
+
+                    QuadTree.GetNearestObjects(a, AddToBuffer(b));
 
                     Model.DetectCollisions(entities, collisions);
 
@@ -125,7 +138,7 @@ namespace GameTests.Physics.Collisions
                     IEntityModel a = Substitute.For<IEntityModel>();
 
                     IEntityModel[] entities = { a };
-                    QuadTree.GetNearestObjects(a).Returns(new[] { a });
+                    QuadTree.GetNearestObjects(a, AddToBuffer(a));
 
                     Model.DetectCollisions(entities, collisions);
 
@@ -142,7 +155,7 @@ namespace GameTests.Physics.Collisions
                     IEntityModel b = CreateEntity(default, out ICircleColliderModel colliderB);
 
                     IEntityModel[] entities = { a, b };
-                    QuadTree.GetNearestObjects(a).Returns(new[] { a, b });
+                    QuadTree.GetNearestObjects(a, AddToBuffer(a, b));
 
                     ColliderCollisionsDetector.LayerCollidesWith(
                         default,
@@ -161,7 +174,7 @@ namespace GameTests.Physics.Collisions
                     IEntityModel b = CreateEntity(default, out ISquareColliderModel colliderB);
 
                     IEntityModel[] entities = { a, b };
-                    QuadTree.GetNearestObjects(a).Returns(new[] { a, b });
+                    QuadTree.GetNearestObjects(a, AddToBuffer(a, b));
 
                     ColliderCollisionsDetector.LayerCollidesWith(
                         default,
@@ -180,7 +193,7 @@ namespace GameTests.Physics.Collisions
                     IEntityModel b = CreateEntity(default, out ICircleColliderModel colliderB);
 
                     IEntityModel[] entities = { a, b };
-                    QuadTree.GetNearestObjects(a).Returns(new[] { a, b });
+                    QuadTree.GetNearestObjects(a, AddToBuffer(a, b));
 
                     ColliderCollisionsDetector.LayerCollidesWith(
                         default,
@@ -199,7 +212,7 @@ namespace GameTests.Physics.Collisions
                     IEntityModel b = CreateEntity<ICircleColliderModel>(default);
 
                     IEntityModel[] entities = { a, b };
-                    QuadTree.GetNearestObjects(a).Returns(new[] { a, b });
+                    QuadTree.GetNearestObjects(a, AddToBuffer(a, b));
 
                     ColliderCollisionsDetector.LayerCollidesWith(
                         default,
