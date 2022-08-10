@@ -10,7 +10,7 @@ public static class GameContextModelFactory
     {
         IPhysicsEntityManager physicsEntityManager = new PhysicsEntityManager(
             physicsUpdater,
-            new CollisionDetector(
+            new CollisionHandler(
                 new QuadTree<IEntityModel>(
                     Camera.main.ViewportToWorldPoint(Vector2.zero),
                     Camera.main.ViewportToWorldPoint(Vector2.one),
@@ -18,7 +18,8 @@ public static class GameContextModelFactory
                 ),
                 gameSettings.PhysicsSettings,
                 gameSettings.DebugSettings,
-                stageBounds
+                stageBounds,
+                new ColliderCollisionDetector()
             )
         );
 

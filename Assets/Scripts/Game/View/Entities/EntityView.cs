@@ -49,7 +49,7 @@ public abstract class EntityView : MonoBehaviour
         if (model is null || !debugSettings.RenderColliders)
             return;
 
-        if (model.Collider is CircleColliderModel circle)
+        if (model.Collider is ICircleColliderModel circle)
         {
             DebugExtension.DrawCircle(
                 circle.Bounds.center,
@@ -58,7 +58,7 @@ public abstract class EntityView : MonoBehaviour
                 circle.Radius
             );
         }
-        else if (model.Collider is SquareColliderModel rect)
+        else if (model.Collider is ISquareColliderModel rect)
         {
             DebugExtension.DrawRect(
                 rect.Bounds,

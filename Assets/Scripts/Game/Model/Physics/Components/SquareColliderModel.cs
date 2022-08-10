@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class SquareColliderModel : ColliderModel
+public class SquareColliderModel : ColliderModel, ISquareColliderModel
 {
     public float OuterRadius { get; set; }
     public float InnerRadius { get; set; }

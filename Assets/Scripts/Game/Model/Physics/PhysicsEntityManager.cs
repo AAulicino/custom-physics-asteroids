@@ -5,13 +5,13 @@ using System.Linq;
 public class PhysicsEntityManager : IDisposable, IPhysicsEntityManager
 {
     readonly IPhysicsUpdater updater;
-    readonly CollisionDetector collisionDetector;
+    readonly ICollisionHandler collisionDetector;
     readonly HashSet<IEntityModel> entities = new();
 
     readonly Queue<AddOrRemoveOperation<IEntityModel>> operationQueue = new();
     readonly List<Collision> collisionsBuffer = new();
 
-    public PhysicsEntityManager (IPhysicsUpdater updater, CollisionDetector detector)
+    public PhysicsEntityManager (IPhysicsUpdater updater, ICollisionHandler detector)
     {
         this.updater = updater;
         this.collisionDetector = detector;
