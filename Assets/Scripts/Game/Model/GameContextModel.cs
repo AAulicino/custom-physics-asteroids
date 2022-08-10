@@ -116,6 +116,8 @@ public class GameContextModel : IDisposable
 
     void HandleGameEnd (bool ended)
     {
+        if (gameEnded)
+            return;
         OnGameEnd?.Invoke(ended);
         gameEnded = true;
     }
