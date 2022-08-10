@@ -7,8 +7,8 @@ public class GameSettings : ScriptableObject, IGameSettings
 
     [field: Space(24)]
     [SerializeField] PlayerSettings playerSettings;
-    [SerializeField] AsteroidSettings asteroidSettings;
     [SerializeField] EntitySettings projectileSettings;
+    [SerializeField] AsteroidSettings asteroidSettings;
 
     [field: Space(24)]
     [SerializeField] DebugSettings debugSettings;

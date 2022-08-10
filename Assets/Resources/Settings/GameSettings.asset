@@ -20,16 +20,17 @@ MonoBehaviour:
     <WrapOnScreenEdge>k__BackingField: 1
     <Drag>k__BackingField: 0.95
     <FireRate>k__BackingField: 0.3
+  projectileSettings:
+    <MaxSpeed>k__BackingField: 10
+    <WrapOnScreenEdge>k__BackingField: 0
+    <Drag>k__BackingField: 1
   asteroidSettings:
     <MaxSpeed>k__BackingField: 5
     <WrapOnScreenEdge>k__BackingField: 1
     <Drag>k__BackingField: 1
     <StartingSize>k__BackingField: 3
     <StartingCount>k__BackingField: 10
-  projectileSettings:
-    <MaxSpeed>k__BackingField: 10
-    <WrapOnScreenEdge>k__BackingField: 0
-    <Drag>k__BackingField: 1
+    <MaximumStartingVelocity>k__BackingField: {x: 2, y: 2}
   debugSettings:
     <RenderCollisionQuadTree>k__BackingField: 1
     <RenderColliders>k__BackingField: 1

@@ -9,4 +9,7 @@ public class AsteroidSettings : EntitySettings, IAsteroidSettings
 
     [field: SerializeField]
     public int StartingCount { get; private set; }
+
+    [field: SerializeField]
+    public Vector2 MaximumStartingSpeed { get; private set; }
 }

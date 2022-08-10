@@ -60,10 +60,15 @@ public class GameContextModel : IDisposable
     {
         for (int i = 0; i < settings.AsteroidSettings.StartingCount; i++)
         {
+            Vector4 maxStartingVelocity = settings.AsteroidSettings.MaximumStartingSpeed;
+
             entityModelFactory.CreateAsteroid(
                 settings.AsteroidSettings.StartingSize,
                 stageBounds.RandomPointNearEdge(),
-                new Vector2(Random.Range(-2f, 2f), Random.Range(-2f, 2f))
+                new Vector2(
+                    Random.Range(-maxStartingVelocity.x, maxStartingVelocity.x),
+                    Random.Range(-maxStartingVelocity.y, maxStartingVelocity.y)
+                )
             );
         }
     }
