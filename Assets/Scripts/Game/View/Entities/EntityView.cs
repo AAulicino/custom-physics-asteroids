@@ -5,7 +5,7 @@ public abstract class EntityView : MonoBehaviour
 {
     public event Action<EntityView> OnDestroy;
 
-    [SerializeField] Vector2 bounds;
+    [SerializeField] Vector2 boundsSize;
 
     bool ModelDestroyed => !model.IsAlive;
 
@@ -17,7 +17,7 @@ public abstract class EntityView : MonoBehaviour
         this.debugSettings = debugSettings;
         this.model = model;
 
-        model.Collider.SetSize(bounds);
+        model.Collider.SetSize(boundsSize);
         transform.localScale = Vector3.one * model.Collider.Scale;
 
         model.OnReadyToReceiveInputs += OnPrePhysicsStep;
@@ -65,5 +65,16 @@ public abstract class EntityView : MonoBehaviour
                 Color.green
             );
         }
+    }
+
+    void OnDrawGizmosSelected ()
+    {
+        Vector3 position = transform.position;
+        Vector2 size = boundsSize * (model?.Collider.Scale ?? 1);
+
+        DebugExtension.DrawRect(
+            new Rect(position.x - size.x / 2, position.y - size.y / 2, size.x, size.y),
+            Color.red
+        );
     }
 }

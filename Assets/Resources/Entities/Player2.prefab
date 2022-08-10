@@ -97,4 +97,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d982a4ff560b642f19dfe8b080f3491e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bounds: {x: 1.11, y: 1.28}
+  boundsSize: {x: 1.11, y: 1.28}
