@@ -29,8 +29,8 @@ MonoBehaviour:
     <WrapOnScreenEdge>k__BackingField: 1
     <Drag>k__BackingField: 1
     <StartingSize>k__BackingField: 3
-    <StartingCount>k__BackingField: 10
-    <MaximumStartingVelocity>k__BackingField: {x: 2, y: 2}
+    <StartingCount>k__BackingField: 6
+    <MaximumStartingSpeed>k__BackingField: {x: 2, y: 2}
   debugSettings:
     <RenderCollisionQuadTree>k__BackingField: 1
     <RenderColliders>k__BackingField: 1
