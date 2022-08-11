@@ -5,7 +5,7 @@ public static class GameContextModelFactory
     public static GameContextModel Create (
         IPhysicsUpdater physicsUpdater,
         IGameSettings gameSettings,
-        IStageBounds stageBounds
+        IStageBoundsModel stageBounds
     )
     {
         IPhysicsEntityManager physicsEntityManager = new PhysicsEntityManager(

@@ -2,7 +2,11 @@ using UnityEngine;
 
 public static class GameContextViewFactory
 {
-    public static GameContextView Create (IUnityUpdater viewUpdater, IGameSettings gameSettings)
+    public static GameContextView Create (
+        IUnityUpdater viewUpdater,
+        IGameSettings gameSettings,
+        IStageBoundsModel stageBoundsModel
+    )
     {
         EntityViewFactory viewFactory = new EntityViewFactory();
 
@@ -12,8 +16,12 @@ public static class GameContextViewFactory
             gameSettings.DebugSettings
         );
 
+        StageBoundsView bounds = new GameObject("StageBoundsView").AddComponent<StageBoundsView>();
+        bounds.Setup(stageBoundsModel);
+
         return new GameContextView(
-            entitiesViewManager
+            entitiesViewManager,
+            bounds
         );
     }
 }

@@ -6,10 +6,14 @@ public class GameInitializer : MonoBehaviour
 
     void Awake ()
     {
-        UnityUpdater viewUpdater = new GameObject("ViewUpdater").AddComponent<UnityUpdater>();
-        GameSettings gameSettings = Resources.Load<GameSettings>("Settings/GameSettings");
+        IUnityUpdater viewUpdater = new GameObject("ViewUpdater").AddComponent<UnityUpdater>();
+        IGameSettings gameSettings = Resources.Load<GameSettings>("Settings/GameSettings");
 
-        gameSession = new GameSession(viewUpdater, gameSettings);
+        gameSession = new GameSession(
+            new PhysicsUpdater(gameSettings.PhysicsSettings),
+            viewUpdater,
+            gameSettings
+        );
         gameSession.Initialize();
         ListenToEditorPause();
     }

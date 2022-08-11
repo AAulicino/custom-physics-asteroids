@@ -19,11 +19,11 @@ public class RigidBodyModel : IRigidBodyModel
     public bool WrapOnScreenEdge => settings.WrapOnScreenEdge;
 
     protected readonly IEntitySettings settings;
-    protected readonly IStageBounds stageInfo;
+    protected readonly IStageBoundsModel stageInfo;
 
     public RigidBodyModel (
         IEntitySettings settings,
-        IStageBounds stageInfo,
+        IStageBoundsModel stageInfo,
         IColliderModel collider
     )
     {

@@ -5,7 +5,7 @@ public class CollisionHandlerModel : ICollisionHandlerModel
 {
     readonly IPhysicsSettings physicsSettings;
     readonly IDebugSettings gameSettings;
-    readonly IStageBounds stageBounds;
+    readonly IStageBoundsModel stageBounds;
     readonly IColliderCollisionDetectorModel colliderCollisions;
     readonly IQuadTree<IEntityModel> quadTree;
     readonly HashSet<IEntityModel> quadTreeObjectsBuffer = new();
@@ -14,7 +14,7 @@ public class CollisionHandlerModel : ICollisionHandlerModel
         IQuadTree<IEntityModel> quadTree,
         IPhysicsSettings physicsSettings,
         IDebugSettings debugSettings,
-        IStageBounds stageBounds,
+        IStageBoundsModel stageBounds,
         IColliderCollisionDetectorModel shapeCollisions
     )
     {

@@ -12,7 +12,7 @@ namespace GameTests.Physics.Collisions
         public IQuadTree<IEntityModel> QuadTree { get; private set; }
         public IPhysicsSettings PhysicsSettings { get; private set; }
         public IDebugSettings DebugSettings { get; private set; }
-        public IStageBounds StageBounds { get; private set; }
+        public IStageBoundsModel StageBounds { get; private set; }
         public IColliderCollisionDetectorModel ColliderCollisionsDetector { get; private set; }
 
         [SetUp]
@@ -21,7 +21,7 @@ namespace GameTests.Physics.Collisions
             QuadTree = Substitute.For<IQuadTree<IEntityModel>>();
             PhysicsSettings = Substitute.For<IPhysicsSettings>();
             DebugSettings = Substitute.For<IDebugSettings>();
-            StageBounds = Substitute.For<IStageBounds>();
+            StageBounds = Substitute.For<IStageBoundsModel>();
             ColliderCollisionsDetector = Substitute.For<IColliderCollisionDetectorModel>();
 
             Model = new CollisionHandlerModel(

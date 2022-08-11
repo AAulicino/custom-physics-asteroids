@@ -3,10 +3,15 @@ using System;
 public class GameContextView : IDisposable
 {
     readonly IEntitiesViewManager viewManager;
+    readonly StageBoundsView stageBoundsView;
 
-    public GameContextView (IEntitiesViewManager viewManager)
+    public GameContextView (
+        IEntitiesViewManager viewManager,
+        StageBoundsView stageBoundsView
+    )
     {
         this.viewManager = viewManager;
+        this.stageBoundsView = stageBoundsView;
     }
 
     public void Initialize ()
@@ -22,5 +27,6 @@ public class GameContextView : IDisposable
     public void Dispose ()
     {
         viewManager.Dispose();
+        stageBoundsView.Dispose();
     }
 }

@@ -5,10 +5,10 @@ public class EntityModelFactory : IEntityModelFactory
 {
     public event Action<IEntityModel> OnEntityCreated;
 
-    readonly IStageBounds stageBounds;
+    readonly IStageBoundsModel stageBounds;
     readonly IGameSettings gameSettings;
 
-    public EntityModelFactory (IStageBounds stageBounds, IGameSettings gameSettings)
+    public EntityModelFactory (IStageBoundsModel stageBounds, IGameSettings gameSettings)
     {
         this.gameSettings = gameSettings;
         this.stageBounds = stageBounds;

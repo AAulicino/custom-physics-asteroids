@@ -9,14 +9,14 @@ namespace GameTests.Entities.RigidBody
         public RigidBodyModel Model { get; private set; }
 
         public IEntitySettings Settings { get; private set; }
-        public IStageBounds StageInfo { get; private set; }
+        public IStageBoundsModel StageInfo { get; private set; }
         public IColliderModel Collider { get; private set; }
 
         [SetUp]
         public void Setup ()
         {
             Settings = Substitute.For<IEntitySettings>();
-            StageInfo = Substitute.For<IStageBounds>();
+            StageInfo = Substitute.For<IStageBoundsModel>();
             Collider = Substitute.For<IColliderModel>();
 
             Settings.MaxSpeed.Returns(float.PositiveInfinity);

@@ -4,20 +4,24 @@ public class GameSession : IDisposable
 {
     readonly IUnityUpdater viewUpdater;
     readonly IGameSettings gameSettings;
-    readonly PhysicsUpdater physicsUpdater;
-    readonly StageBounds stageBounds;
+    readonly IPhysicsUpdater physicsUpdater;
+    readonly StageBoundsModel stageBounds;
 
     GameContextModel gameContextModel;
     GameContextView gameContextView;
     GameContextUIView gameContextUIView;
 
-    public GameSession (IUnityUpdater viewUpdater, IGameSettings gameSettings)
+    public GameSession (
+        IPhysicsUpdater physicsUpdater,
+        IUnityUpdater viewUpdater,
+        IGameSettings gameSettings
+    )
     {
-        this.viewUpdater = viewUpdater as UnityUpdater;
-        this.gameSettings = gameSettings as GameSettings;
+        this.viewUpdater = viewUpdater;
+        this.gameSettings = gameSettings;
+        this.physicsUpdater = physicsUpdater;
 
-        physicsUpdater = new PhysicsUpdater(gameSettings.PhysicsSettings);
-        stageBounds = new StageBounds(physicsUpdater, viewUpdater);
+        stageBounds = new StageBoundsModel(physicsUpdater);
     }
 
     public void Initialize ()
@@ -35,7 +39,7 @@ public class GameSession : IDisposable
             stageBounds
         );
 
-        gameContextView = GameContextViewFactory.Create(viewUpdater, gameSettings);
+        gameContextView = GameContextViewFactory.Create(viewUpdater, gameSettings, stageBounds);
         gameContextModel.OnEntityCreated += HandleEntityCreated;
         gameContextModel.OnGameEnd += HandleGameEnd;
 
