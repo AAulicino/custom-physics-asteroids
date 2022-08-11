@@ -10,7 +10,7 @@ public class GameSettings : ScriptableObject, IGameSettings
     [SerializeField] EntitySettings projectileSettings;
     [SerializeField] AsteroidSettings asteroidSettings;
 
-    [field: Space(24)]
+    [field: Space(24), Tooltip("Enable gizmos view debug lines")]
     [SerializeField] DebugSettings debugSettings;
 
     public IPlayerSettings PlayerSettings => playerSettings;
