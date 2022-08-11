@@ -10,20 +10,21 @@ public class GameContextModel : IDisposable
 
     readonly IPhysicsUpdater physicsUpdater;
 
-    readonly IStageBounds stageBounds;
+    readonly IStageBoundsModel stageBounds;
     readonly IPhysicsEntityManager physicsEntityManager;
     readonly IEntityModelFactory entityModelFactory;
     readonly IGameSettings settings;
 
-    readonly List<IEntityModel> activePlayers = new();
-    readonly List<IEntityModel> activeAsteroids = new();
+    readonly HashSet<IEntityModel> activePlayers = new();
+    readonly HashSet<IEntityModel> activeAsteroids = new();
+    readonly HashSet<IEntityModel> activeProjectiles = new();
 
     bool gameEnded;
 
     public GameContextModel (
         IPhysicsUpdater physicsUpdater,
         IPhysicsEntityManager physicsEntityManager,
-        IStageBounds stageBounds,
+        IStageBoundsModel stageBounds,
         IGameSettings settings,
         IEntityModelFactory entityModelFactory
     )
@@ -79,6 +80,8 @@ public class GameContextModel : IDisposable
             activeAsteroids.Add(entity);
         else if (entity is IPlayerModel)
             activePlayers.Add(entity);
+        else if (entity is IProjectileModel)
+            activeProjectiles.Add(entity);
 
         physicsEntityManager.AddEntity(entity);
         entity.OnDestroy += HandleEntityDestroyed;
@@ -94,6 +97,8 @@ public class GameContextModel : IDisposable
             HandleAsteroidDestroyed(entity);
         else if (entity is PlayerModel)
             HandlePlayerDestroyed(entity);
+        else if (entity is ProjectileModel)
+            HandleProjectileDestroyed(entity);
     }
 
     void HandleAsteroidDestroyed (IEntityModel asteroid)
@@ -114,6 +119,12 @@ public class GameContextModel : IDisposable
             HandleGameEnd(false);
     }
 
+    void HandleProjectileDestroyed (IEntityModel projectile)
+    {
+        projectile.OnDestroy -= HandleProjectileDestroyed;
+        activeProjectiles.Remove(projectile);
+    }
+
     void HandleGameEnd (bool ended)
     {
         if (gameEnded)
@@ -128,6 +139,8 @@ public class GameContextModel : IDisposable
             player.Destroy();
         foreach (IEntityModel asteroid in activeAsteroids)
             asteroid.Destroy();
+        foreach (IEntityModel projectile in activeProjectiles)
+            projectile.Destroy();
 
         activePlayers.Clear();
         activeAsteroids.Clear();
